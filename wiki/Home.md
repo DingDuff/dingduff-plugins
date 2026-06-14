@@ -51,6 +51,7 @@ it** and ask Claude to walk you through everything. The easiest path:
 - [Team & Enterprise](Team-and-Enterprise) — what to do if you're on a work plan and can't add the connector.
 - [Troubleshooting](Troubleshooting) — fixes for common problems (a tool isn't working, you can't sign in, etc.).
 - [Skills & Settings](Skills) — optional add-ons that make DingDuff noticeably better.
+- [How Citation Checking Works](Citation-Checking) — what the cite-checker does, and the design behind its reliability and privacy.
 
 ---
 

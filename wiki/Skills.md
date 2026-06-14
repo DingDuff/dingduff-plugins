@@ -44,6 +44,7 @@ your skill picker.
   Needs `python3` (Cowork and Claude Code provide it). Save case/statute sources
   first via `opinion_store` / `statute_store`; drop any other source (text or a
   text-layer PDF) into your working folder.
+  How it works — reliability & privacy: see [How Citation Checking Works](Citation-Checking).
 
 ### Citation formatting
 

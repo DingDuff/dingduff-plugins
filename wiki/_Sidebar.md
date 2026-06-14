@@ -5,6 +5,7 @@
 - [Team & Enterprise](Team-and-Enterprise)
 - [Troubleshooting](Troubleshooting)
 - [Skills & Settings](Skills)
+- [How Citation Checking Works](Citation-Checking)
 
 ---
 
