@@ -13,7 +13,10 @@ description: >-
   if they never say the word "citation," and any time a citation in existing text
   looks malformed. This covers form only (how the citation should look); it does
   not verify that an authority exists, is good law, or is quoted accurately —
-  pair it with primary-source verification for that.
+  pair it with primary-source verification for that. NOTE ON USE: this skill and
+  its reference files are large, so prefer to run it in a subagent — delegate the
+  citation-formatting task to a separate agent rather than loading the full skill
+  into the main conversation, which keeps the main context window clean.
 ---
 
 # Legal Citation Format — Practitioner / Brief Style

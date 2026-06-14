@@ -49,7 +49,9 @@ your skill picker.
   pincites, short forms, block quotes). It fixes *form only* — pair it with the
   research or cite-check skills to confirm an authority exists and is quoted
   accurately. Works on its own (no connector needed).
-  Download: [`dingduff_legal-citation-format_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.0.skill)
+  It's a large skill, so Claude will usually run it in a subagent — that's
+  expected and keeps your main chat fast.
+  Download: [`dingduff_legal-citation-format_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.1.skill)
 
 ## How to install a skill
 
