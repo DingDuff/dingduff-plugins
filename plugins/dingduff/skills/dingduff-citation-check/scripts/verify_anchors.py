@@ -525,7 +525,15 @@ class FatalError(Exception):
 SOURCE_PASSTHROUGH_KEYS = (
     "type", "path", "cluster_id", "case_name", "citation",
     "code", "section", "statute_id", "jurisdiction", "missing",
+    "title", "kind",
 )
+
+# "opinion"/"statute" are public hosted authorities the review panel re-fetches
+# from DingDuff. A "document" is an attorney-supplied working file (a
+# Restatement section, an off-CourtListener case, an opposing brief, a factual
+# PDF): matched the same way, but it has no citing-cases appendix to guard and
+# is delivered to the panel inline rather than fetched.
+SOURCE_TYPES = ("opinion", "statute", "document")
 
 CLUSTER_ID_LINE_RE = re.compile(r"^\*\*Cluster ID:\*\*\s*(\S+)", re.MULTILINE)
 
@@ -543,8 +551,9 @@ def validate_proposals(proposals: Any) -> None:
     if not isinstance(sources, dict) or not sources:
         raise FatalError("proposals.sources must be a non-empty object")
     for key, src in sources.items():
-        if not isinstance(src, dict) or src.get("type") not in ("opinion", "statute"):
-            raise FatalError(f"source '{key}': type must be 'opinion' or 'statute'")
+        if not isinstance(src, dict) or src.get("type") not in SOURCE_TYPES:
+            raise FatalError(
+                f"source '{key}': type must be one of {SOURCE_TYPES}")
         if src.get("missing"):
             continue
         if not isinstance(src.get("path"), str):
@@ -616,6 +625,12 @@ def run(proposals: Dict[str, Any], workdir: Path, max_gap: int,
             docs[key] = Document(read_document(path))
         except UnicodeDecodeError as exc:
             raise FatalError(f"source '{key}' is not valid UTF-8: {exc}") from exc
+        if src.get("type") == "document":
+            # A working file has no citing-cases appendix or DingDuff footer;
+            # the whole file is quotable. (Opinions keep the body guard; the
+            # `## Citing Cases` / footer markers gate quoting to the body.)
+            docs[key].body_end = len(docs[key].raw)
+            docs[key].header_end = 0
         entry["sha256"] = sha256_file(path)
         if src.get("type") == "opinion" and src.get("cluster_id") is not None:
             m = CLUSTER_ID_LINE_RE.search(docs[key].raw)

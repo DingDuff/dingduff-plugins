@@ -1,6 +1,6 @@
 ---
 name: dingduff-citation-check
-description: Verify every citation in a drafted legal memo against DingDuff-stored opinion and statute source files. Use after drafting a memo when the user asks to cite-check, citecheck, verify citations, verify quotes, check cites, or validate authorities. Produces cites.json, opens the interactive attorney review panel (or a standalone review.html), and records the attorney's verdicts in review.json.
+description: Verify every citation in a drafted legal memo (Markdown, Word, or Google Docs) against stored opinions and statutes plus any other source documents the attorney supplies (a Restatement section, an off-CourtListener case, an opposing brief, a factual PDF). Use after drafting a memo when the user asks to cite-check, citecheck, verify citations, verify quotes, check cites, or validate authorities. Produces cites.json, opens the interactive attorney review panel (or a standalone review.html), and records the attorney's verdicts in review.json.
 ---
 
 # Cite-Check: verify a memo's citations against stored sources
@@ -30,11 +30,31 @@ asks.
 3. Run every script from the PROJECT ROOT (the working folder containing the
    memo), so all recorded paths are project-root-relative.
 
-## Step 1 — Locate the memo
+## Step 1 — Locate and normalize the memo
 
-The markdown memo to be checked (usually the one just drafted). If multiple
-candidates exist, ask the user. Only markdown is supported in v1 — if the
-deliverable is .docx, cite-check the markdown draft before conversion.
+Cite-check verifies plain UTF-8 text, so accept the memo in any common form and
+convert it to a Markdown working file first. **That converted `.md` is the memo
+of record** — its path and SHA-256 are what flows through `cites.json` and what
+the audit certifies, so everything below uses it as `memo.path`. Tell the user
+plainly which file you are checking.
+
+- **Markdown / plain text** (`.md`, `.txt`): use as-is.
+- **Word** (`.docx`): convert with the bundled extractor —
+  ```
+  python3 <skill-dir>/scripts/extract_docx.py --in <memo>.docx --out <memo>.md
+  ```
+  It keeps paragraph order and pulls in **footnotes and endnotes** (where legal
+  cites often live) and the accept-all view of tracked changes. If its stderr
+  warns about unaccepted tracked changes, say so — the check ran against the
+  accepted text — and ask the user to confirm that is the version they mean.
+- **Google Docs**: export/download the doc to `.docx` (the connected Google
+  Drive tool's export, or in the browser File → Download → Microsoft Word),
+  then convert it the same way.
+- **PDF** (only when the PDF itself is the work product): extract its text layer
+  to `.md`/`.txt` with available PDF tooling, then check that. There is **no
+  OCR** — a scanned PDF with no text layer cannot be checked.
+
+If multiple memo candidates exist, ask the user which to check.
 
 ## Step 2 — Inventory the stored sources
 
@@ -57,6 +77,26 @@ Build the sources map:
   identifier used with statute_store (e.g. `TX/property/92.006`,
   `US/18-usc/1001`) — reconstruct it from the file's metadata block. The
   review panel needs it to re-fetch the statute, so get it right.
+
+### Working-file sources (non-DingDuff)
+
+The DingDuff corpus isn't comprehensive. The attorney can also cite-check
+against sources they supply — a Restatement section, a case missing from
+CourtListener, the other side's brief, a factual PDF. Treat any such file as a
+`document` source:
+
+- Accept it as text/markdown (pasted in or saved into `sources/`), or extract
+  it first: `.docx` via `python3 <skill-dir>/scripts/extract_docx.py --in
+  <file>.docx --out sources/<name>.md`; a **text-layer** PDF via available PDF
+  tooling. There is **no OCR** — a scanned image-only PDF can't be checked.
+- Map it as key `doc-{filename stem}`, with `type: "document", path, title`
+  (a human label, e.g. `"Defendant's MSJ Brief"`, `"Restatement (Second) of
+  Torts § 46"`) and `kind` ∈ `case | secondary | brief | evidence | other`.
+- Two honest limits to state to the attorney: the tool verifies only that the
+  quoted/paraphrased text **appears in the file** — for an off-CourtListener
+  "case" it does **not** confirm the case is real or still good law; and a
+  document is only as trustworthy as the file supplied (extraction can be
+  lossy, so a noisy PDF yields more `anchor_failed` rows to eyeball).
 
 ## Step 3 — Enumerate every citation INSTANCE
 
@@ -87,7 +127,8 @@ Hard rules for quotes:
   must be at least ~10 characters, segments must appear in document order,
   and they must be reasonably close together.
 - NEVER quote from the `## Citing Cases` section or the file footer — only
-  the opinion body (the verifier rejects these).
+  the opinion body (the verifier rejects these). This guard is opinion-only;
+  for a `document` source the whole file is quotable.
 - Signal cites (*see generally*, string-cite tails) where no specific
   passage is claimable: set `"no_quote_claimed": true` with empty
   `anchors_proposed`. Use sparingly — every no-quote citation is one the
@@ -116,7 +157,11 @@ Write `.cite-check/proposals.json` (create the scratch dir):
     "stat-tex_prop_code_92_006": { "type": "statute",
                   "path": "sources/tex_prop_code_92_006.md",
                   "statute_id": "TX/property/92.006",
-                  "code": "Property Code", "section": "92.006" }
+                  "code": "Property Code", "section": "92.006" },
+    "doc-restatement_torts_46": { "type": "document",
+                  "path": "sources/restatement_torts_46.md",
+                  "title": "Restatement (Second) of Torts § 46",
+                  "kind": "secondary" }
   },
   "citations": [
     { "id": "c001", "source": "cl-12345",
@@ -162,6 +207,12 @@ Call the `citecheck_review` MCP tool with:
   reformat, or "clean up" — the panel verifies it against the memo's
   SHA-256 from cites.json and flags any transcription drift).
 - `cites`: the parsed content of cites.json.
+- `documents`: **required if cites.sources has any `document` entries** — a map
+  from each `document` source key to `{ "text": "<the file's full contents,
+  verbatim>", "title": "<same label>" }`. These working files ride inline to
+  the panel and, like the memo, are never stored or logged. Do **not** include
+  opinions or statutes here (those are fetched live from DingDuff). Omit the
+  argument entirely when there are no document sources.
 
 This renders the two-pane review panel in the conversation. Then ALWAYS
 build the standalone fallback too (cheap, local, and the only path on

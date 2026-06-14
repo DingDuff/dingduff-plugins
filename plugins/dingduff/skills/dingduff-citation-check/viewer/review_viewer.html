@@ -556,7 +556,9 @@
   function renderSource(key, focusCid) {
     var body = $("source-body");
     var meta = src.cites.sources[key] || {};
-    var label = meta.case_name || meta.citation || key;
+    var label = meta.type === "document"
+      ? (meta.title || key)
+      : (meta.case_name || meta.citation || key);
     $("source-label").textContent = "Source — " + label +
       (meta.path ? " (" + meta.path + ")" : "");
     body.replaceChildren();
@@ -576,8 +578,13 @@
       if (!doc || doc.missing || !doc.segments) {
         var n = document.createElement("div");
         n.className = "notice warn";
-        n.textContent = "No stored copy of this source is available. The cited " +
-          "authority could not be verified — obtain the source and re-run /cite-check.";
+        n.textContent = (doc && doc.missingInline)
+          ? "This supplied document's text was not delivered to the panel. " +
+            "Re-run the dingduff-citation-check skill so it passes the document " +
+            "in the `documents` argument (and ensure the DingDuff server " +
+            "companion is deployed)."
+          : "No stored copy of this source is available. The cited authority " +
+            "could not be verified — obtain the source and re-run /cite-check.";
         container.appendChild(n);
       } else {
         if (doc.checksum_ok === false) {
@@ -597,7 +604,8 @@
           var x = document.createElement("div");
           x.className = "notice warn";
           var head = document.createElement("strong");
-          head.textContent = u.cid + ": verified passage not re-located in this fetched copy — ";
+          head.textContent = u.cid + ": verified passage not located in " +
+            (doc.reanchored ? "this freshly fetched copy" : "this source") + " — ";
           x.appendChild(head);
           var q = document.createElement("em");
           q.textContent = "“" + u.quote + "”";
@@ -953,6 +961,10 @@
     if (meta.type === "opinion") {
       var name = meta.case_name || ("cluster " + (meta.cluster_id || "?"));
       return meta.citation ? name + ", " + meta.citation : name;
+    }
+    if (meta.type === "document") {
+      var label = meta.title || "supplied document";
+      return meta.kind ? label + " (" + meta.kind + ")" : label;
     }
     if (meta.citation) { return meta.citation; }
     if (meta.code && meta.section) { return meta.code + " § " + meta.section; }
@@ -1333,29 +1345,37 @@
     };
   }
 
-  // SHA-256 the delivered memo_text and compare to cites.memo.sha256 (the
-  // hash of the file the verifier actually checked). Skips silently when
-  // crypto.subtle is unavailable in the host iframe.
+  // SHA-256 hex of a string, or null when crypto.subtle is unavailable (old
+  // browser / non-secure host iframe) so callers can skip the check silently
+  // rather than claim a mismatch they couldn't actually compute.
+  function sha256Hex(text) {
+    if (typeof text !== "string" ||
+        !(window.crypto && crypto.subtle && crypto.subtle.digest &&
+          typeof TextEncoder !== "undefined")) {
+      return Promise.resolve(null);
+    }
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(text))
+      .then(function (buf) {
+        return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+          return ("0" + b.toString(16)).slice(-2);
+        }).join("");
+      }).catch(function () { return null; });
+  }
+
+  // Compare the delivered memo_text to cites.memo.sha256 (the hash of the file
+  // the verifier actually checked); banner on mismatch.
   function checkMemoIntegrity(memoText, expectedSha) {
     if (!expectedSha || typeof memoText !== "string") { return; }
-    if (!(window.crypto && crypto.subtle && crypto.subtle.digest &&
-          typeof TextEncoder !== "undefined")) { return; }
-    try {
-      crypto.subtle.digest("SHA-256", new TextEncoder().encode(memoText))
-        .then(function (buf) {
-          var hex = Array.prototype.map.call(new Uint8Array(buf), function (b) {
-            return ("0" + b.toString(16)).slice(-2);
-          }).join("");
-          if (hex !== expectedSha) {
-            var banner = $("banner");
-            banner.hidden = false;
-            banner.textContent = "⚠ The memo text delivered to this panel does " +
-              "not match the memo that was verified (SHA-256 mismatch — likely " +
-              "transcription drift in the tool call). Highlights and links may " +
-              "be unreliable; re-run the dingduff-citation-check skill.";
-          }
-        }).catch(function () { /* host without subtle crypto — skip */ });
-    } catch (e) { /* skip */ }
+    sha256Hex(memoText).then(function (hex) {
+      if (hex !== null && hex !== expectedSha) {
+        var banner = $("banner");
+        banner.hidden = false;
+        banner.textContent = "⚠ The memo text delivered to this panel does " +
+          "not match the memo that was verified (SHA-256 mismatch — likely " +
+          "transcription drift in the tool call). Highlights and links may " +
+          "be unreliable; re-run the dingduff-citation-check skill.";
+      }
+    });
   }
 
   function showMcpStatus(text) {
@@ -1411,11 +1431,37 @@
   function makeMcpSource(bridge, args) {
     var cites = args.cites;
     var memoText = args.memo_text;
+    var documents = args.documents || {};  // inline 'document' source texts
     var misses = { count: 0 };
     var binds = {};
     cites.citations.forEach(function (c) {
       if (c.binds_to) { binds[c.id] = c.binds_to; }
     });
+    // Re-anchor every quote for `key` into docText (the JS normalizer is
+    // locked to the Python verifier), then segment for highlighting. Shared by
+    // the fetched-source path and the inline-document path.
+    function buildSourceDoc(key, docText, reanchored) {
+      var normDoc = normalizeWithMap(docText);
+      var spans = [], unlocated = [];
+      cites.citations.forEach(function (c) {
+        if (c.source !== key) { return; }
+        (c.anchors || []).forEach(function (a, i) {
+          var span = findQuoteSpan(docText, normDoc, a.quote);
+          if (span) {
+            spans.push({ start: span.start, end: span.end, mark: c.id + ":" + i });
+          } else {
+            misses.count += 1;
+            unlocated.push({ cid: c.id, quote: a.quote });
+          }
+        });
+      });
+      // `reanchored` drives the "re-located in a freshly fetched copy" notice —
+      // true for hosted opinions/statutes (the panel fetches a fresh copy that
+      // may differ from the verified file), false for inline documents (the
+      // delivered text IS the verified working file, so no caveat is needed).
+      return { segments: segmentDocument(docText, spans),
+               checksum_ok: true, reanchored: !!reanchored, unlocated: unlocated };
+    }
     return {
       mode: "mcp",
       cites: cites,
@@ -1430,6 +1476,27 @@
       getSourceDoc: function (key) {
         var meta = cites.sources[key] || {};
         if (meta.missing) { return Promise.resolve({ segments: null, missing: true }); }
+        // Working-file ('document') sources ride inline in args.documents —
+        // they are attorney work product and are never fetched from the server.
+        // Key off the authoritative source type (required in cites.sources), not
+        // the mere presence of a documents entry, so an inline payload can never
+        // shadow a hosted opinion/statute fetch.
+        if (meta.type === "document") {
+          var inline = documents[key];
+          if (!inline || typeof inline.text !== "string") {
+            return Promise.resolve({ segments: null, missing: true, missingInline: true });
+          }
+          // Integrity: the inline text must match the file the verifier hashed
+          // (cites.sources[key].sha256). On mismatch, show the text but suppress
+          // highlights — the same posture as the standalone bundle and the memo
+          // check. Skips silently when crypto.subtle can't compute a hash.
+          return sha256Hex(inline.text).then(function (hex) {
+            if (hex !== null && meta.sha256 && hex !== meta.sha256) {
+              return { segments: [{ text: inline.text, marks: [] }], checksum_ok: false };
+            }
+            return buildSourceDoc(key, inline.text, false);
+          });
+        }
         var sourceId = meta.type === "opinion"
           ? (meta.cluster_id != null ? String(meta.cluster_id) : null)
           : (meta.statute_id || null);
@@ -1442,23 +1509,7 @@
           if (!sc || typeof sc.document_markdown !== "string") {
             throw new Error((sc && sc.error) || "source fetch returned no document");
           }
-          var docText = sc.document_markdown;
-          var normDoc = normalizeWithMap(docText);
-          var spans = [], unlocated = [];
-          cites.citations.forEach(function (c) {
-            if (c.source !== key) { return; }
-            (c.anchors || []).forEach(function (a, i) {
-              var span = findQuoteSpan(docText, normDoc, a.quote);
-              if (span) {
-                spans.push({ start: span.start, end: span.end, mark: c.id + ":" + i });
-              } else {
-                misses.count += 1;
-                unlocated.push({ cid: c.id, quote: a.quote });
-              }
-            });
-          });
-          return { segments: segmentDocument(docText, spans),
-                   checksum_ok: true, reanchored: true, unlocated: unlocated };
+          return buildSourceDoc(key, sc.document_markdown, true);
         });
       },
       sendReview: function (reviewJson, summary) {
