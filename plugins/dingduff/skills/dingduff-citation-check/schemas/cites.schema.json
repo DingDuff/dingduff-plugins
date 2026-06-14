@@ -19,13 +19,13 @@
     },
     "sources": {
       "type": "object",
-      "description": "Deduplicated map of cited source documents. Keys: 'cl-{cluster_id}' for opinions, 'stat-{filename stem}' for statutes.",
+      "description": "Deduplicated map of cited source documents. Keys: 'cl-{cluster_id}' for opinions, 'stat-{filename stem}' for statutes, 'doc-{filename stem}' for attorney-supplied working files.",
       "additionalProperties": {
         "type": "object",
         "required": ["type"],
         "properties": {
-          "type": { "enum": ["opinion", "statute"] },
-          "path": { "type": ["string", "null"], "description": "Project-root-relative path to the stored markdown file. Null only when missing=true." },
+          "type": { "enum": ["opinion", "statute", "document"], "description": "'opinion'/'statute' are DingDuff-hosted authorities the panel re-fetches; 'document' is an attorney-supplied working file (Restatement section, off-CourtListener case, opposing brief, factual PDF) delivered to the panel inline." },
+          "path": { "type": ["string", "null"], "description": "Project-root-relative path to the stored markdown/text file. Null only when missing=true." },
           "sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 of the source file's raw bytes. Null only when missing=true." },
           "missing": { "type": "boolean", "description": "True when the cited authority had no stored file and the user declined to fetch it; its citations carry status=anchor_failed, failure_reason=source_missing." },
           "cluster_id": { "type": ["string", "integer"], "description": "CourtListener cluster id (opinions). Used by viewers to re-fetch the document." },
@@ -34,7 +34,9 @@
           "statute_id": { "type": "string", "description": "DingDuff statute identifier '[jurisdiction]/[code]/[section]', e.g. 'US/18-usc/1001'. Used by viewers to re-fetch the document." },
           "code": { "type": "string" },
           "section": { "type": "string" },
-          "jurisdiction": { "type": "string" }
+          "jurisdiction": { "type": "string" },
+          "title": { "type": "string", "description": "Human-readable label for a 'document' source (e.g. 'Defendant's MSJ Brief', 'Restatement (Second) of Torts § 46'). Shown in the review panel's source pane." },
+          "kind": { "enum": ["case", "secondary", "brief", "evidence", "other"], "description": "Sub-classification of a 'document' source, for the attorney's context only." }
         }
       }
     },

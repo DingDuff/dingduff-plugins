@@ -556,7 +556,9 @@
   function renderSource(key, focusCid) {
     var body = $("source-body");
     var meta = src.cites.sources[key] || {};
-    var label = meta.case_name || meta.citation || key;
+    var label = meta.type === "document"
+      ? (meta.title || key)
+      : (meta.case_name || meta.citation || key);
     $("source-label").textContent = "Source — " + label +
       (meta.path ? " (" + meta.path + ")" : "");
     body.replaceChildren();
@@ -597,7 +599,7 @@
           var x = document.createElement("div");
           x.className = "notice warn";
           var head = document.createElement("strong");
-          head.textContent = u.cid + ": verified passage not re-located in this fetched copy — ";
+          head.textContent = u.cid + ": verified passage not located in this source — ";
           x.appendChild(head);
           var q = document.createElement("em");
           q.textContent = "“" + u.quote + "”";
@@ -953,6 +955,10 @@
     if (meta.type === "opinion") {
       var name = meta.case_name || ("cluster " + (meta.cluster_id || "?"));
       return meta.citation ? name + ", " + meta.citation : name;
+    }
+    if (meta.type === "document") {
+      var label = meta.title || "supplied document";
+      return meta.kind ? label + " (" + meta.kind + ")" : label;
     }
     if (meta.citation) { return meta.citation; }
     if (meta.code && meta.section) { return meta.code + " § " + meta.section; }
@@ -1411,11 +1417,37 @@
   function makeMcpSource(bridge, args) {
     var cites = args.cites;
     var memoText = args.memo_text;
+    var documents = args.documents || {};  // inline 'document' source texts
     var misses = { count: 0 };
     var binds = {};
     cites.citations.forEach(function (c) {
       if (c.binds_to) { binds[c.id] = c.binds_to; }
     });
+    // Re-anchor every quote for `key` into docText (the JS normalizer is
+    // locked to the Python verifier), then segment for highlighting. Shared by
+    // the fetched-source path and the inline-document path.
+    function buildSourceDoc(key, docText, reanchored) {
+      var normDoc = normalizeWithMap(docText);
+      var spans = [], unlocated = [];
+      cites.citations.forEach(function (c) {
+        if (c.source !== key) { return; }
+        (c.anchors || []).forEach(function (a, i) {
+          var span = findQuoteSpan(docText, normDoc, a.quote);
+          if (span) {
+            spans.push({ start: span.start, end: span.end, mark: c.id + ":" + i });
+          } else {
+            misses.count += 1;
+            unlocated.push({ cid: c.id, quote: a.quote });
+          }
+        });
+      });
+      // `reanchored` drives the "re-located in a freshly fetched copy" notice —
+      // true for hosted opinions/statutes (the panel fetches a fresh copy that
+      // may differ from the verified file), false for inline documents (the
+      // delivered text IS the verified working file, so no caveat is needed).
+      return { segments: segmentDocument(docText, spans),
+               checksum_ok: true, reanchored: !!reanchored, unlocated: unlocated };
+    }
     return {
       mode: "mcp",
       cites: cites,
@@ -1430,6 +1462,15 @@
       getSourceDoc: function (key) {
         var meta = cites.sources[key] || {};
         if (meta.missing) { return Promise.resolve({ segments: null, missing: true }); }
+        // Working-file ('document') sources ride inline in args.documents —
+        // they are attorney work product and are never fetched from the server.
+        if (meta.type === "document" || documents[key]) {
+          var inline = documents[key];
+          if (!inline || typeof inline.text !== "string") {
+            return Promise.resolve({ segments: null, missing: true });
+          }
+          return Promise.resolve(buildSourceDoc(key, inline.text, false));
+        }
         var sourceId = meta.type === "opinion"
           ? (meta.cluster_id != null ? String(meta.cluster_id) : null)
           : (meta.statute_id || null);
@@ -1442,23 +1483,7 @@
           if (!sc || typeof sc.document_markdown !== "string") {
             throw new Error((sc && sc.error) || "source fetch returned no document");
           }
-          var docText = sc.document_markdown;
-          var normDoc = normalizeWithMap(docText);
-          var spans = [], unlocated = [];
-          cites.citations.forEach(function (c) {
-            if (c.source !== key) { return; }
-            (c.anchors || []).forEach(function (a, i) {
-              var span = findQuoteSpan(docText, normDoc, a.quote);
-              if (span) {
-                spans.push({ start: span.start, end: span.end, mark: c.id + ":" + i });
-              } else {
-                misses.count += 1;
-                unlocated.push({ cid: c.id, quote: a.quote });
-              }
-            });
-          });
-          return { segments: segmentDocument(docText, spans),
-                   checksum_ok: true, reanchored: true, unlocated: unlocated };
+          return buildSourceDoc(key, sc.document_markdown, true);
         });
       },
       sendReview: function (reviewJson, summary) {
