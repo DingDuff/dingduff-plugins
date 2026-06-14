@@ -54,7 +54,7 @@ your skill picker.
   accurately. Works on its own (no connector needed).
   It's a large skill, so Claude will usually run it in a subagent — that's
   expected and keeps your main chat fast.
-  Download: [`dingduff_legal-citation-format_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.1.skill)
+  Download: [`dingduff_legal-citation-format_v1.2.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.2.skill)
 
 ## How to install a skill
 

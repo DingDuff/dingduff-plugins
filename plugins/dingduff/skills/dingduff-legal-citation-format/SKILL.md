@@ -1,22 +1,19 @@
 ---
 name: dingduff-legal-citation-format
 description: >-
-  Format legal citations the way courts expect to see them in briefs, motions,
-  memoranda, and other litigation documents. Use this whenever drafting,
-  inserting, fixing, or cleaning up a citation to a case, statute, constitution,
-  regulation, rule, secondary source (treatise, law review article, dictionary),
-  or a document filed in the same matter — and whenever a draft needs signals
-  (see, cf., but see), pincites, short forms (id./supra), string citations,
-  explanatory parentheticals, or quotation formatting (block quotes, alterations,
-  omissions). Trigger this any time the user is writing or revising a legal
-  document that relies on authority and wants the citations to look right, even
-  if they never say the word "citation," and any time a citation in existing text
-  looks malformed. This covers form only (how the citation should look); it does
-  not verify that an authority exists, is good law, or is quoted accurately —
-  pair it with primary-source verification for that. NOTE ON USE: this skill and
-  its reference files are large, so prefer to run it in a subagent — delegate the
-  citation-formatting task to a separate agent rather than loading the full skill
-  into the main conversation, which keeps the main context window clean.
+  Format legal citations in the style courts expect (briefs, motions,
+  memoranda, pleadings). Use when drafting, inserting, or fixing a citation to
+  a case, statute, constitution, regulation, rule, secondary source (treatise,
+  law review, etc), or a same-matter filing — or when a draft needs signals
+  (e.g. see, cf., but see), pincites, short forms (id./supra), string cites,
+  explanatory parentheticals, or quotation formatting (block quotes,
+  alterations, omissions). Trigger whenever the user is writing or revising a
+  legal document that relies on authority and wants its citations to look
+  right or when a citation looks malformed. COVERS FORM ONLY: it does not
+  verify that an authority exists, is good law, or is quoted accurately; pair
+  it with primary-source verification (separate skill). NOTE: This skill and
+  reference files are large, so run it in a subagent — delegate the formatting
+  task rather than loading the full skill into the main context window.
 ---
 
 # Legal Citation Format — Practitioner / Brief Style
