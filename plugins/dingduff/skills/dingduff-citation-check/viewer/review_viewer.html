@@ -1464,7 +1464,10 @@
         if (meta.missing) { return Promise.resolve({ segments: null, missing: true }); }
         // Working-file ('document') sources ride inline in args.documents —
         // they are attorney work product and are never fetched from the server.
-        if (meta.type === "document" || documents[key]) {
+        // Key off the authoritative source type (required in cites.sources), not
+        // the mere presence of a documents entry, so an inline payload can never
+        // shadow a hosted opinion/statute fetch.
+        if (meta.type === "document") {
           var inline = documents[key];
           if (!inline || typeof inline.text !== "string") {
             return Promise.resolve({ segments: null, missing: true });

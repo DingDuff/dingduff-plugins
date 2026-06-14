@@ -157,10 +157,13 @@ def _body_blocks(body: ET.Element, refs: Dict[str, Set[str]],
     return blocks
 
 
-def _notes(zf: zipfile.ZipFile, part: str, container_tag: str, item_tag: str,
-           refs: Dict[str, Set[str]], stats: Dict[str, int]
-           ) -> List[Tuple[int, str, str]]:
-    """Return [(sort_key, id, text)] for real (non-separator) notes."""
+def _notes(zf: zipfile.ZipFile, part: str, item_tag: str,
+           referenced_ids: Set[str], refs: Dict[str, Set[str]],
+           stats: Dict[str, int]) -> List[Tuple[int, str, str]]:
+    """Return [(sort_key, id, text)] for real notes actually referenced in the
+    body. Orphan definitions — including a note whose only reference sat in
+    deleted (tracked-change) text — are skipped so they can't inject stray
+    text or citations into the extracted memo."""
     if part not in zf.namelist():
         return []
     root = ET.fromstring(zf.read(part))
@@ -168,6 +171,8 @@ def _notes(zf: zipfile.ZipFile, part: str, container_tag: str, item_tag: str,
     for note in root.findall(W + item_tag):
         nid = note.get(W + "id")
         if nid is None or note.get(W + "type") in SEPARATOR_TYPES:
+            continue
+        if nid not in referenced_ids:
             continue
         paras = [_paragraph_text(p, refs, stats) for p in note.findall(W + "p")]
         text = " ".join(s.strip() for s in paras if s.strip()).strip()
@@ -197,8 +202,11 @@ def extract_docx(path: Path) -> Tuple[str, Dict[str, Any]]:
             body = doc_root.find(W + "body")
             blocks = _body_blocks(body, refs, stats) if body is not None else []
 
-            footnotes = _notes(zf, FOOTNOTES_PART, "footnotes", "footnote", refs, stats)
-            endnotes = _notes(zf, ENDNOTES_PART, "endnotes", "endnote", refs, stats)
+            # Snapshot the ids the body actually references BEFORE reading the
+            # note parts, so only referenced notes are emitted (see _notes).
+            ref_foot, ref_end = set(refs["foot"]), set(refs["end"])
+            footnotes = _notes(zf, FOOTNOTES_PART, "footnote", ref_foot, refs, stats)
+            endnotes = _notes(zf, ENDNOTES_PART, "endnote", ref_end, refs, stats)
     except zipfile.BadZipFile as exc:
         raise FatalError(f"cannot read {path}: {exc}") from exc
     except ET.ParseError as exc:
