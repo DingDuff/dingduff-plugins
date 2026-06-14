@@ -42,6 +42,15 @@ your skill picker.
   Needs `python3` (Cowork and Claude Code provide it) and the cited sources saved
   first via `opinion_store` / `statute_store`.
 
+### Citation formatting
+
+- **`dingduff-legal-citation-format`** — formats legal citations in
+  practitioner / brief style (cases, statutes, signals like *see* / *cf.*,
+  pincites, short forms, block quotes). It fixes *form only* — pair it with the
+  research or cite-check skills to confirm an authority exists and is quoted
+  accurately. Works on its own (no connector needed).
+  Download: [`dingduff_legal-citation-format_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.0.skill)
+
 ## How to install a skill
 
 Download the `.skill` file(s) above (on GitHub, open the file and use the
