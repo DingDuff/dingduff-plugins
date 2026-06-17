@@ -20,27 +20,27 @@ your skill picker.
 
 ### Research skills
 
-- **`dingduff-case-law-research-standard`** (v1.0) — the right default for most legal
+- **`dingduff-case-law-research-standard`** (v1.1) — the right default for most legal
   questions. Runs systematic searches, reads the actual opinions, and builds a
   cited answer.
-  Download: [`dingduff_case-law-research-standard_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-standard_v1.0.skill)
-- **`dingduff-case-law-research-deep`** (v1.0) — exhaustive case-law research that maps
+  Download: [`dingduff_case-law-research-standard_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-standard_v1.1.skill)
+- **`dingduff-case-law-research-deep`** (v1.1) — exhaustive case-law research that maps
   the full citation network and validity-checks every key case. For briefs,
   dispositive motions, and formal opinions.
-  Download: [`dingduff_case-law-research-deep_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-deep_v1.0.skill)
-- **`dingduff-statute-research-deep`** (v1.0) — exhaustive statutory research: full code
+  Download: [`dingduff_case-law-research-deep_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-deep_v1.1.skill)
+- **`dingduff-statute-research-deep`** (v1.1) — exhaustive statutory research: full code
   mapping, definitions, cross-references, and judicial gloss on ambiguous terms.
-  Download: [`dingduff_statute-research-deep_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_statute-research-deep_v1.0.skill)
+  Download: [`dingduff_statute-research-deep_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_statute-research-deep_v1.1.skill)
 
 ### Citation checking
 
-- **`dingduff-citation-check`** (v1.4) — after you draft a memo (Markdown, **Word, or
+- **`dingduff-citation-check`** (v1.5) — after you draft a memo (Markdown, **Word, or
   Google Docs**), verifies every citation against the opinion and statute files
   you saved **plus any other source you supply** — a Restatement section, a case
   missing from CourtListener, the other side's brief, a factual PDF — and opens a
   review panel showing the memo and each source side by side. Runs entirely in
   your own session.
-  Download: [`dingduff_citation-check_v1.4.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_citation-check_v1.4.skill)
+  Download: [`dingduff_citation-check_v1.5.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_citation-check_v1.5.skill)
   Needs `python3` (Cowork and Claude Code provide it). Save case/statute sources
   first via `opinion_store` / `statute_store`; drop any other source (text or a
   text-layer PDF) into your working folder.
@@ -48,14 +48,14 @@ your skill picker.
 
 ### Citation formatting
 
-- **`dingduff-legal-citation-format`** (v1.2) — formats legal citations in
+- **`dingduff-legal-citation-format`** (v1.3) — formats legal citations in
   practitioner / brief style (cases, statutes, signals like *see* / *cf.*,
   pincites, short forms, block quotes). It fixes *form only* — pair it with the
   research or cite-check skills to confirm an authority exists and is quoted
   accurately. Works on its own (no connector needed).
   It's a large skill, so Claude will usually run it in a subagent — that's
   expected and keeps your main chat fast.
-  Download: [`dingduff_legal-citation-format_v1.2.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.2.skill)
+  Download: [`dingduff_legal-citation-format_v1.3.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.3.skill)
 
 ## How to install a skill
 

@@ -1,6 +1,6 @@
 ---
 name: dingduff-case-law-research-deep
-description: Exhaustive, recursive case law research that maps the full citation network for a legal question — ancestors back to the doctrinal source, descendants forward to the most recent applications, and a proactive validity check on every key case. Use ONLY when the user explicitly requests deep, comprehensive, exhaustive, or "all-angles" research, or asks for a citation network, doctrinal genealogy, or a definitive answer suitable for an appellate brief, dispositive motion, or formal legal opinion. Do NOT use for ordinary "what does the law say" questions — for those, use dingduff-case-law-research-standard.
+description: Exhaustive, recursive case law research that maps the full citation network for a legal question — ancestors back to the doctrinal source, descendants forward to the most recent applications, and a proactive validity check on every key case. Use ONLY when the user explicitly requests deep, comprehensive, exhaustive, or "all-angles" research, or asks for a citation network, doctrinal genealogy, or a definitive answer suitable for an appellate brief, dispositive motion, or formal legal opinion. Do NOT use for ordinary "what does the law say" questions — for those, use dingduff-case-law-research-standard. (v1.1)
 ---
 
 # Case Law Research — Deep

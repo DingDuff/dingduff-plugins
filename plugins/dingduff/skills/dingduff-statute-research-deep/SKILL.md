@@ -1,6 +1,6 @@
 ---
 name: dingduff-statute-research-deep
-description: Exhaustive statutory research — bidirectional code mapping (top-down hierarchy + bottom-up keyword search), definition discovery, cross-code interconnections, and targeted retrieval of judicial interpretations whenever a statutory phrase is ambiguous, controlling, or has a known interpretive gloss. Use ONLY when the user explicitly requests deep, comprehensive, or exhaustive statutory research, wants a full map of a statutory regime, asks for "everything in the code on X," needs a practitioner-ready statutory roadmap, or is preparing a brief / opinion / advisory where missing a provision would be costly. Do NOT use for simple "what does § X say" lookups.
+description: Exhaustive statutory research — bidirectional code mapping (top-down hierarchy + bottom-up keyword search), definition discovery, cross-code interconnections, and targeted retrieval of judicial interpretations whenever a statutory phrase is ambiguous, controlling, or has a known interpretive gloss. Use ONLY when the user explicitly requests deep, comprehensive, or exhaustive statutory research, wants a full map of a statutory regime, asks for "everything in the code on X," needs a practitioner-ready statutory roadmap, or is preparing a brief / opinion / advisory where missing a provision would be costly. Do NOT use for simple "what does § X say" lookups. (v1.1)
 ---
 
 # Statute Research — Deep

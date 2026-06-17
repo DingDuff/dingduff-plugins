@@ -27,11 +27,11 @@ legal-workflow skills for Claude. These skills are built to work with the
 
 1. Download the skill(s) you want from [`dist/`](dist/) (open the file and use the
    **Download raw file** button):
-   - [`dingduff_case-law-research-standard_v1.0.skill`](dist/dingduff_case-law-research-standard_v1.0.skill)
-   - [`dingduff_case-law-research-deep_v1.0.skill`](dist/dingduff_case-law-research-deep_v1.0.skill)
-   - [`dingduff_statute-research-deep_v1.0.skill`](dist/dingduff_statute-research-deep_v1.0.skill)
-   - [`dingduff_citation-check_v1.4.skill`](dist/dingduff_citation-check_v1.4.skill)
-   - [`dingduff_legal-citation-format_v1.2.skill`](dist/dingduff_legal-citation-format_v1.2.skill)
+   - [`dingduff_case-law-research-standard_v1.1.skill`](dist/dingduff_case-law-research-standard_v1.1.skill)
+   - [`dingduff_case-law-research-deep_v1.1.skill`](dist/dingduff_case-law-research-deep_v1.1.skill)
+   - [`dingduff_statute-research-deep_v1.1.skill`](dist/dingduff_statute-research-deep_v1.1.skill)
+   - [`dingduff_citation-check_v1.5.skill`](dist/dingduff_citation-check_v1.5.skill)
+   - [`dingduff_legal-citation-format_v1.3.skill`](dist/dingduff_legal-citation-format_v1.3.skill)
 2. In Claude, open your **Skills** settings:
    - **Cowork (desktop):** Customize (upper right) → **Skills** → upload skill
    - **claude.ai:** Settings → **Capabilities** → Skills → upload skill

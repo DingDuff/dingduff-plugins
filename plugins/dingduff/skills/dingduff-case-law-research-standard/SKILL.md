@@ -1,6 +1,6 @@
 ---
 name: dingduff-case-law-research-standard
-description: Find and analyze relevant case law systematically. Use for any legal research requiring court opinions, precedent analysis, citation verification, or comprehensive case law documentation. Trigger whenever the user asks about "the law on X," wants to "find cases" or "research precedent," asks "what does the case law say," wants a memo or brief built on authority, or needs to verify holdings, quotes, citations, or a circuit split — even if the user never says the words "case law" or "research."
+description: Find and analyze relevant case law systematically. Use for any legal research requiring court opinions, precedent analysis, citation verification, or comprehensive case law documentation. Trigger whenever the user asks about "the law on X," wants to "find cases" or "research precedent," asks "what does the case law say," wants a memo or brief built on authority, or needs to verify holdings, quotes, citations, or a circuit split — even if the user never says the words "case law" or "research." (v1.1)
 ---
 
 # Case Law Research

@@ -13,7 +13,7 @@ description: >-
   verify that an authority exists, is good law, or is quoted accurately; pair
   it with primary-source verification (separate skill). NOTE: This skill and
   reference files are large, so run it in a subagent — delegate the formatting
-  task rather than loading the full skill into the main context window.
+  task rather than loading the full skill into the main context window. (v1.3)
 ---
 
 # Legal Citation Format — Practitioner / Brief Style
