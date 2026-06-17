@@ -20,21 +20,21 @@ your skill picker.
 
 ### Research skills
 
-- **`dingduff-case-law-research-standard`** — the right default for most legal
+- **`dingduff-case-law-research-standard`** (v1.0) — the right default for most legal
   questions. Runs systematic searches, reads the actual opinions, and builds a
   cited answer.
   Download: [`dingduff_case-law-research-standard_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-standard_v1.0.skill)
-- **`dingduff-case-law-research-deep`** — exhaustive case-law research that maps
+- **`dingduff-case-law-research-deep`** (v1.0) — exhaustive case-law research that maps
   the full citation network and validity-checks every key case. For briefs,
   dispositive motions, and formal opinions.
   Download: [`dingduff_case-law-research-deep_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-deep_v1.0.skill)
-- **`dingduff-statute-research-deep`** — exhaustive statutory research: full code
+- **`dingduff-statute-research-deep`** (v1.0) — exhaustive statutory research: full code
   mapping, definitions, cross-references, and judicial gloss on ambiguous terms.
   Download: [`dingduff_statute-research-deep_v1.0.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_statute-research-deep_v1.0.skill)
 
 ### Citation checking
 
-- **`dingduff-citation-check`** — after you draft a memo (Markdown, **Word, or
+- **`dingduff-citation-check`** (v1.4) — after you draft a memo (Markdown, **Word, or
   Google Docs**), verifies every citation against the opinion and statute files
   you saved **plus any other source you supply** — a Restatement section, a case
   missing from CourtListener, the other side's brief, a factual PDF — and opens a
@@ -48,7 +48,7 @@ your skill picker.
 
 ### Citation formatting
 
-- **`dingduff-legal-citation-format`** — formats legal citations in
+- **`dingduff-legal-citation-format`** (v1.2) — formats legal citations in
   practitioner / brief style (cases, statutes, signals like *see* / *cf.*,
   pincites, short forms, block quotes). It fixes *form only* — pair it with the
   research or cite-check skills to confirm an authority exists and is quoted
