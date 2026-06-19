@@ -42,6 +42,17 @@ Give the date and use "at" before the page.
 
 - Daniel P. Okafor, *City Council Approves Zoning Overhaul*, N.Y. Times, Mar. 3, 2022, at A1.
 
+## Internet and electronic sources
+
+Prefer a print or official source when one exists; cite directly to the internet when the material is only online, or when the online version is the authoritative or more convenient one. The basic formula is: author (if any), the italicized title of the page, the website or domain name, a date parenthetical, and the URL.
+
+Pattern: `<Author>, <Title of Page>, <Website Name> (<date>), <URL>.`
+
+- Helena R. Marsh, *Why the Economic Loss Rule Endures*, Lawfare (May 4, 2023), https://www.lawfare.example/economic-loss-rule.
+- Organization as author / no individual author: *About the Federal Courts*, U.S. Courts, https://www.uscourts.gov/about (last visited June 1, 2024).
+
+Add a `(last visited <date>)` parenthetical when the page is undated or its content may change. If you give the source a short tag, the `[hereinafter ...]` bracket comes right after the URL (or after the "last visited" parenthetical if there is one). Use ordinary roman type throughout except the page title, which is italicized.
+
 ## Short forms for secondary sources
 
 Use *id.* for the immediately preceding authority. Otherwise use *supra*: the author's last name, then *supra* (italicized up to but not including the comma), then the new pincite. If the document cites more than one work by the same author, add a short title.
@@ -67,3 +78,7 @@ For a document filed in the same case, abbreviate the document's title, then giv
 For the official record on appeal, abbreviate "Record" to "R.": R. at 112. Do not abbreviate where doing so would confuse the reader (and do not abbreviate document titles when they appear in a textual sentence — write "Plaintiff's Motion for Summary Judgment," not "Pl.'s Mot. Summ. J.," in running prose).
 
 To cite a document filed in a **different** case, cite it the way you would cite that case's filing, identifying the case.
+
+---
+
+*Rules and examples here are based on, and written to be consistent with, [The Indigo Book: A Manual of Legal Citation](https://law.resource.org/pub/us/code/blue/IndigoBook.html) (Sprigman et al., Public Resource 2016), a free CC0/public-domain implementation of the Uniform System of Citation. This is an original restatement for practice — not a copy of The Indigo Book.*

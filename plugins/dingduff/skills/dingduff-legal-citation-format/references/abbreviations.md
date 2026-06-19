@@ -1,6 +1,6 @@
 # Abbreviations, Numbers, and Symbols
 
-This is a working list of the abbreviations attorneys use most. It is not exhaustive — for an unusual reporter, court, journal, or party word, follow the same patterns and consult a full abbreviation table.
+This is a working list of the abbreviations attorneys use most. It is not exhaustive — for an unusual reporter, court, journal, or party word, follow the same patterns and consult a full abbreviation table. These abbreviations track the required-abbreviation tables in *The Indigo Book* (reporters and courts, T1 & T9; case-name words, T11; geographic terms, T12; document subdivisions, T13; explanatory phrases, T14; publishing terms, T16; months, T17; periodical words, T18). Those tables are facts required by courts, not anyone's property; when in doubt, consult the corresponding Indigo Book table.
 
 ## Spacing and periods — the rules that govern every abbreviation
 
@@ -67,3 +67,7 @@ Jan., Feb., Mar., Apr., May, June, July, Aug., Sept., Oct., Nov., Dec. (Note: "S
 - Spell out a number that begins a sentence.
 - Use `§` for "section" and `§§` for multiple sections; `¶` and `¶¶` for paragraphs. Put a non-breaking space between the symbol and the number. Spell out "Section" when it begins a sentence.
 - Use a comma in numbers of five or more digits (52,782).
+
+---
+
+*Rules and examples here are based on, and written to be consistent with, [The Indigo Book: A Manual of Legal Citation](https://law.resource.org/pub/us/code/blue/IndigoBook.html) (Sprigman et al., Public Resource 2016), a free CC0/public-domain implementation of the Uniform System of Citation. This is an original restatement for practice — not a copy of The Indigo Book.*

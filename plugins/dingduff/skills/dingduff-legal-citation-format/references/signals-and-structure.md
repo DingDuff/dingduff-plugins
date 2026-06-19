@@ -31,7 +31,7 @@ You can attach *e.g.* to *see* or *but see*: *See, e.g.,* … and *But see, e.g.
 
 ## Order of signals
 
-When one citation sentence uses more than one signal, the signals (with their authorities) appear in the order in the table above — support signals first, then comparison, then contradiction, then background. Signals of different "types" are normally placed in **separate citation sentences** rather than strung together.
+When one citation sentence uses more than one signal, the signals (with their authorities) appear in the order in the table above — support signals first, then comparison, then contradiction, then background. Signals of **different categories** are placed in **separate citation sentences** rather than strung together; signals of the **same category** sit in one sentence, separated by semicolons. In a citation **clause** (within a sentence), by contrast, all signals — regardless of category — go in the single clause, separated by semicolons.
 
 ## Order of authorities within a signal
 
@@ -55,4 +55,16 @@ A parenthetical after a citation explains the authority's relevance. Begin it wi
 - *See Vasquez v. Coastal Freight Co.*, 640 F.3d 200, 206 (9th Cir. 2011) (explaining that the disclaimer failed because it was buried in fine print and never separately acknowledged by the buyer).
 - Quoted full sentence: *Okafor v. Summit Indus., Inc.*, 305 F. Supp. 3d 410, 418 (S.D. Tex. 2018) ("A warranty disclaimer that a reasonable buyer would never notice is no disclaimer at all.").
 
-When a citation needs more than one parenthetical, order them: weight/posture, then a "quoting"/"citing" parenthetical, then the explanatory parenthetical, then any "(citation omitted)" / "(emphasis added)" notes — and an explanatory parenthetical about the case comes before subsequent history. When the non-substantive cleanup notes start to pile up, you can collapse them into a single "(cleaned up)" parenthetical — see `short-forms-and-quotations.md`.
+### Order of parentheticals
+
+When a citation carries several parentheticals, *The Indigo Book* (R36) fixes their order. Reading left to right after the citation:
+
+`(date) [hereinafter <short name>] (en banc) (<Lastname>, J., concurring) (plurality opinion) (per curiam) (alteration in original) (emphasis added) (footnote omitted) (citations omitted) (quoting <source>) (internal quotation marks omitted) (citing <source>), <URL> (explanatory parenthetical)`, then **prior or subsequent history** last.
+
+So weight-and-posture notes come first (right after the date), the quotation-cleanup notes and *quoting/citing* chains come next, the **explanatory** parenthetical comes after all of those, and case history closes the cite. An explanatory parenthetical about the case always precedes its subsequent history.
+
+When the non-substantive cleanup notes — *(alteration in original)*, *(emphasis omitted)*, *(citations omitted)*, *(internal quotation marks omitted)*, *(footnote omitted)*, and the *quoting … (quoting …)* chain — start to pile up, collapse the whole cluster into a single **(cleaned up)** parenthetical in that same slot (just before the explanatory parenthetical and history). *(Emphasis added)* is substantive and is **not** absorbed by *(cleaned up)* — keep it separate. See `short-forms-and-quotations.md`.
+
+---
+
+*Rules and examples here are based on, and written to be consistent with, [The Indigo Book: A Manual of Legal Citation](https://law.resource.org/pub/us/code/blue/IndigoBook.html) (Sprigman et al., Public Resource 2016), a free CC0/public-domain implementation of the Uniform System of Citation. This is an original restatement for practice — not a copy of The Indigo Book.*

@@ -2,7 +2,7 @@
 
 ## Short forms generally
 
-After a full citation, use a short form for every later reference — provided (1) the reader can tell which authority you mean, (2) the full citation is in the same general discussion, and (3) the reader can find the full citation without trouble.
+After a full citation, use a short form for every later reference — provided (1) the reader can tell which authority you mean, (2) the full citation is in the same general discussion, and (3) the reader can find the full citation without trouble. In a footnoted document, a common "preceding five" norm lets you keep using a short form as long as the full citation appears within the previous five footnotes; the convention is not absolute, so give a fresh full cite whenever a short form would be ambiguous.
 
 ### *id.*
 
@@ -90,4 +90,8 @@ The same quotation, the long way and the consolidated way:
 
 > "The warranty attaches by operation of law, and a disclaimer the buyer would never see does not defeat it." *Okafor v. Summit Indus., Inc.*, 305 F. Supp. 3d 410, 418 (S.D. Tex. 2018) (cleaned up).
 
-A note on the label. The newest national citation standard now blesses this same consolidation but calls it **(citation modified)**, and it steers writers away from "(cleaned up)." In actual filings the reverse is true: "(cleaned up)" is far more common — every federal circuit has used it and it has appeared in a unanimous U.S. Supreme Court opinion — while "(citation modified)" is only beginning to circulate. Both are optional; you may always keep the granular parentheticals instead. Follow your court's convention if it has one. Absent that, "(cleaned up)" is the form most judges and readers will recognize today; use "(citation modified)" if you specifically want to track the latest formal standard.
+A note on the label. This guide uses **(cleaned up)**, the convention also adopted by *The Indigo Book*'s second edition. The original 2016 *Indigo Book* predates the parenthetical (it was proposed by Jack Metzler in 2017), but "(cleaned up)" has since become the prevailing practitioner form — every federal circuit has used it and it has appeared in a unanimous U.S. Supreme Court opinion. The latest edition of *The Bluebook* recognizes a similar consolidation under a different label, "(citation modified)," but that form is far less common in filings; this guide follows *The Indigo Book* and prevailing practice. Both the consolidated and the granular forms are optional — follow your court's convention if it has one, and you may always keep the individual cleanup parentheticals instead.
+
+---
+
+*Rules and examples here are based on, and written to be consistent with, [The Indigo Book: A Manual of Legal Citation](https://law.resource.org/pub/us/code/blue/IndigoBook.html) (Sprigman et al., Public Resource 2016), a free CC0/public-domain implementation of the Uniform System of Citation. This is an original restatement for practice — not a copy of The Indigo Book.*

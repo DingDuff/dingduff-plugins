@@ -9,16 +9,25 @@ description: >-
   explanatory parentheticals, or quotation formatting (block quotes,
   alterations, omissions). Trigger whenever the user is writing or revising a
   legal document that relies on authority and wants its citations to look
-  right or when a citation looks malformed. COVERS FORM ONLY: it does not
+  right or when a citation looks malformed. Rules follow The Indigo Book.
+  COVERS FORM ONLY: it does not
   verify that an authority exists, is good law, or is quoted accurately; pair
   it with primary-source verification (separate skill). NOTE: This skill and
   reference files are large, so run it in a subagent — delegate the formatting
-  task rather than loading the full skill into the main context window. (v1.3)
+  task rather than loading the full skill into the main context window. (v1.4)
 ---
 
 # Legal Citation Format — Practitioner / Brief Style
 
-This skill produces citations in the conventional **practitioner format** — the style used in documents filed with a court (briefs, motions, memoranda, pleadings). That format is intentionally simpler than the academic style used in law journals, and it is close enough to uniform across U.S. jurisdictions that one generic standard works for almost everything an attorney files.
+This skill produces citations in the conventional **practitioner format** — the style used in **standard legal documents (SLDs)**: documents filed with a court (briefs, motions, memoranda, pleadings) and documents lawyers write to one another or the public (opinion letters, legal memoranda). That format is intentionally simpler than the **academic style** used in law review articles (ALDs), and it is close enough to uniform across U.S. jurisdictions that one generic standard works for almost everything an attorney files. The rules below state the SLD form; where a law-review (ALD) convention differs, that is flagged.
+
+## Source and attribution
+
+The rules and examples in this skill are based on, and written to be consistent with, **_The Indigo Book: A Manual of Legal Citation_** (Sprigman et al., Public Resource 2016) — a free, open-source implementation of the same Uniform System of Citation that *The Bluebook* implements. *The Indigo Book* is dedicated to the public domain under a CC0 dedication, and the citation system it restates ("a uniform system of citation") consists of facts and methods that no one owns. Where this skill addresses the consolidated "(cleaned up)" quotation parenthetical, it also follows the approach adopted in *The Indigo Book*'s second edition (Romig et al., 2021/2022).
+
+This skill is an **original document**, not a copy or reproduction of *The Indigo Book*. It restates and adapts the citation rules in our own words and with our own (illustrative) examples, for use in practice. *The Indigo Book* is not affiliated with or authorized by *The Bluebook® A Uniform System of Citation®*, and neither is this skill. Citations produced under this guide are compatible with the Uniform System of Citation. For any rule this skill does not reach, consult *The Indigo Book* (https://law.resource.org/pub/us/code/blue/IndigoBook.html) or a full citation manual.
+
+*Version 1.4 — reconciled with The Indigo Book.*
 
 ## Before anything else: defer to controlling local rules
 
@@ -73,7 +82,7 @@ Pattern: `<Case Name>, <Volume> <Reporter> <First Page>, <Pincite> (<Court> <Yea
 - State high court (regional reporter): *Whitman v. Harbor Mut. Ins. Co.*, 431 P.3d 220, 224 (Cal. 2018).
 - State intermediate court: *Marsh v. Cedar Valley Hosp.*, 215 S.W.3d 700, 705 (Tex. App. 2006).
 
-(Party names, volumes, and pages in these examples are illustrative — they show form, not real cases.) Notes: the U.S. Supreme Court takes **no court abbreviation** — the year alone sits in the parenthetical. A state's highest court likewise takes no court name; include the state in the parenthetical when you cite a regional reporter, and give the year alone only when the official state reporter already names the state. A footnote pincite is `, 226 n.4` with no space inside `n.4`. If the pincite is the first page of the opinion, repeat the page: `488 F.3d 415, 415`.
+(Party names, volumes, and pages in these examples are illustrative — they show form, not real cases.) Notes: the U.S. Supreme Court takes **no court abbreviation** — the year alone sits in the parenthetical. A state's highest court likewise takes no court name; include the state in the parenthetical when you cite a regional reporter, and give the year alone only when the official state reporter already names the state. A footnote pincite is `, 226 n.4` with no space inside `n.4`. If the pincite is the first page of the opinion, repeat the page: `488 F.3d 415, 415`. Where a state has adopted a **public-domain (media-neutral) citation**, *The Indigo Book* encourages using it, with a parallel cite to the regional reporter where possible (see `references/cases.md`).
 
 ### Statutes
 
@@ -84,7 +93,7 @@ Pattern: `<Title> <Code> § <Section> (<Year>).`
 - State (unofficial code shows the publisher): Tex. Civ. Prac. & Rem. Code Ann. § 16.003 (West 2017); Cal. Civ. Code § 1542 (West 2019).
 - Federal rules (no date): Fed. R. Civ. P. 12(b)(6); Fed. R. Evid. 401.
 
-Nothing in a statute cite is italicized. The year is the edition of the code, not the year of enactment. (In current practice many attorneys and courts omit the year for the current official U.S. Code; include it when in doubt or when local rules expect it.)
+Nothing in a statute cite is italicized. The year is the **edition of the code**, not the year of enactment. The official U.S. Code is recodified every six years (2000, 2006, 2012, 2018, …); cite the most recent edition that contains the version of the statute you mean, adding a supplement parenthetical if the provision was amended after that edition (e.g., `(2018 & Supp. II 2020)`). *The Indigo Book* includes the edition year; some attorneys and courts omit it for the current official Code, but include it when in doubt or when local rules expect it.
 
 ### Constitutions
 
@@ -103,7 +112,7 @@ That is enough for cases, statutes, and constitutions in most filings. For every
 - `references/statutes-constitutions-regulations.md` — federal and state statutes, session laws, named acts, constitutions, the C.F.R. and Federal Register, agency adjudications, executive orders, legislative materials (bills, reports, hearings), procedural rules, restatements, uniform acts, and tax materials.
 - `references/secondary-sources.md` — treatises and books, law review and journal articles, magazines and newspapers, encyclopedias, dictionaries, and documents filed in the same matter (record cites, briefs, motions, transcripts).
 - `references/signals-and-structure.md` — citation sentences vs. clauses, the full set of signals and what each means, the order of signals, the order of authorities within a citation, string citations, and explanatory parentheticals.
-- `references/short-forms-and-quotations.md` — *id.*, *supra*, *hereinafter*, case short forms with parallel cites; inline vs. block quotations, alterations (brackets, *[sic]*, added emphasis), omissions (ellipses), and how to collapse a pile-up of cleanup parentheticals into a single *(cleaned up)* — the convention courts now use — or *(citation modified)*.
+- `references/short-forms-and-quotations.md` — *id.*, *supra*, *hereinafter*, case short forms with parallel cites; inline vs. block quotations (50-word rule), alterations (brackets, *[sic]*, added emphasis), omissions (ellipses), and how to collapse a pile-up of cleanup parentheticals into a single *(cleaned up)* — the convention this guide uses, consistent with *The Indigo Book*'s second edition.
 - `references/abbreviations.md` — common reporters, federal and state court abbreviations and the spacing rules, case-name word abbreviations (including the few allowed in textual sentences), history/explanatory phrases, geographic terms, and months.
 
 ## Mistakes to watch for

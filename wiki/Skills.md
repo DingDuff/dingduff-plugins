@@ -48,14 +48,14 @@ your skill picker.
 
 ### Citation formatting
 
-- **`dingduff-legal-citation-format`** (v1.3) — formats legal citations in
+- **`dingduff-legal-citation-format`** (v1.4) — formats legal citations in
   practitioner / brief style (cases, statutes, signals like *see* / *cf.*,
-  pincites, short forms, block quotes). It fixes *form only* — pair it with the
+  pincites, short forms, block quotes). Its rules follow *The Indigo Book* (a free, public-domain citation manual). It fixes *form only* — pair it with the
   research or cite-check skills to confirm an authority exists and is quoted
   accurately. Works on its own (no connector needed).
   It's a large skill, so Claude will usually run it in a subagent — that's
   expected and keeps your main chat fast.
-  Download: [`dingduff_legal-citation-format_v1.3.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.3.skill)
+  Download: [`dingduff_legal-citation-format_v1.4.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_legal-citation-format_v1.4.skill)
 
 ## How to install a skill
 

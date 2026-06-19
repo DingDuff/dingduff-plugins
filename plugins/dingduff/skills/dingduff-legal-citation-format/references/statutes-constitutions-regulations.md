@@ -14,7 +14,9 @@ Pattern: `<Title> U.S.C. § <Section> (<Year>).`
 - With the act's popular name and original section number: Securities Exchange Act of 1934 § 10(b), 15 U.S.C. § 78j(b) (2018). (Here "§ 10(b)" is the section of the act; "§ 78j(b)" is where it sits in the Code.)
 - Unofficial/annotated code — add the publisher to the parenthetical: 42 U.S.C.A. § 1983 (West 2020).
 
-The year is the **edition of the code**, not the year the statute was enacted. In current practice many attorneys and courts omit the year for the current official U.S. Code; keep it when in doubt or when a court expects it.
+Cite the **official U.S. Code (U.S.C.)** when you can. The U.S.C. is recodified every six years (2000, 2006, 2012, 2018, …); cite the most recent edition that contains the version of the statute you mean, and add a cumulative-supplement parenthetical when the provision was amended after that edition: 47 U.S.C. § 223 (2018 & Supp. II 2020). If the U.S.C. is unavailable, cite an unofficial code — **U.S.C.A. is preferred** (West), then U.S.C.S. (LexisNexis) — naming the publisher in the parenthetical: 18 U.S.C.A. §§ 2701–2711 (West 2000); 30 U.S.C.S. §§ 181–287 (LexisNexis 2015). If neither code carries the provision, cite the session laws (below).
+
+The year is the **edition of the code**, not the year the statute was enacted. *The Indigo Book* includes the edition year; some attorneys and courts omit it for the current official Code, but keep it when in doubt or when a court expects it.
 
 ### Session laws (statutes not yet codified, or cited as enacted)
 
@@ -43,7 +45,8 @@ Cite the official code where one exists; the format varies by state. A typical c
 You may replace "26 U.S.C." with "I.R.C." In a court document discussing only current tax law, you may omit the year and publisher parenthetical.
 
 - 26 U.S.C. § 162 (2018) → I.R.C. § 162.
-- Treasury regulations: Treas. Reg. § 1.162-1 (2019).
+- Treasury regulations: Treas. Reg. § 1.162-1 (2019). Temporary regulations: Temp. Treas. Reg. § 1.274-5T(c)(6) (1985).
+- Treasury determinations — Revenue Rulings, Revenue Procedures, and Treasury Decisions: Rev. Rul. 81-225, 1981-2 C.B. 12; Rev. Proc. 97-27, 1997-21 I.R.B. 11; T.D. 2135, 17 Treas. Dec. Int. Rev. 39 (1915). Cite to the Cumulative Bulletin (C.B.) first, then the Internal Revenue Bulletin (I.R.B.).
 
 ## Constitutions
 
@@ -84,3 +87,7 @@ For statutes and regulations, use *id.* for the immediately preceding authority.
 | 40 C.F.R. § 261.4 (2023). | *Id.* | *Id.* § 261.5(a)(1). |
 
 Otherwise, a statute short form repeats the code and section: 42 U.S.C. § 1983.
+
+---
+
+*Rules and examples here are based on, and written to be consistent with, [The Indigo Book: A Manual of Legal Citation](https://law.resource.org/pub/us/code/blue/IndigoBook.html) (Sprigman et al., Public Resource 2016), a free CC0/public-domain implementation of the Uniform System of Citation. This is an original restatement for practice — not a copy of The Indigo Book.*
