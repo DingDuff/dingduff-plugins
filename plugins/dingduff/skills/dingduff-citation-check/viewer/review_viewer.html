@@ -223,6 +223,17 @@
   #card .prop { color: var(--ink); margin: 6px 0; }
   #card .prop b { color: var(--muted); font-weight: 600; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.04em; }
   #card .meta { color: var(--muted); font-size: 0.85em; }
+  #src-search-row { display: flex; align-items: center; gap: 6px; margin: 8px 0 2px; }
+  #src-search { flex: 1 1 auto; min-width: 0; padding: 4px 8px; border: 1px solid var(--line);
+                border-radius: 6px; font-size: 0.88em; background: #fff; }
+  #src-search-count { color: var(--muted); font-size: 0.8em; white-space: nowrap;
+                      min-width: 34px; text-align: right; }
+  #src-search-row button { padding: 1px 8px; font-size: 1.05em; line-height: 1.3; }
+  #src-search-row button:disabled { opacity: 0.4; cursor: default; }
+  /* find-in-source matches (CSS Custom Highlight API) — distinct blue, so they
+     never get confused with the yellow anchor highlights. */
+  ::highlight(cc-search) { background-color: #bfe1ff; }
+  ::highlight(cc-search-current) { background-color: #4ea2f7; color: #fff; }
   #card .fail-note, #card .stale-note {
     background: var(--red-bg); color: var(--red);
     border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-size: 0.9em;
@@ -319,12 +330,20 @@
         <span class="badge match" id="card-match" hidden></span>
         <span class="meta" id="card-meta"></span>
         <span id="nav-btns">
-          <button id="prev-btn" title="Previous citation (↑)">↑ prev</button>
-          <button id="next-btn" title="Next citation (↓)">↓ next</button>
+          <button id="prev-btn" title="Previous citation (←)">← prev</button>
+          <button id="next-btn" title="Next citation (→)">→ next</button>
         </span>
       </div>
       <div class="cite-text" id="card-cite"></div>
       <div class="prop"><b>Offered for:</b> <span id="card-prop"></span></div>
+      <div id="src-search-row">
+        <input id="src-search" type="search" placeholder="Find in source…"
+               autocomplete="off" spellcheck="false"
+               title="Search the source document shown below (Enter / Shift+Enter to step through matches)">
+        <span id="src-search-count"></span>
+        <button id="src-search-prev" type="button" title="Previous match (Shift+Enter)" aria-label="Previous match">‹</button>
+        <button id="src-search-next" type="button" title="Next match (Enter)" aria-label="Next match">›</button>
+      </div>
       <div class="fail-note" id="card-fail" hidden></div>
       <div class="stale-note" id="card-stale" hidden></div>
       <div id="verdicts">
@@ -342,7 +361,7 @@
   </section>
 </main>
 <div id="footer" hidden>
-  <span>Keyboard: <kbd>↑</kbd>/<kbd>↓</kbd> prev/next · <kbd>1</kbd>–<kbd>3</kbd> verdicts</span>
+  <span>Keyboard: <kbd>←</kbd>/<kbd>→</kbd> prev/next · <kbd>1</kbd>–<kbd>3</kbd> verdicts</span>
   <span id="anchor-counter"></span>
   <span id="mode-label"></span>
 </div>
@@ -416,6 +435,7 @@
   var sourceCache = {};     // source key -> rendered container
   var anchorEls = {};       // "cid:i" -> [<mark>] (current source only)
   var storageKey = null;
+  var search = { query: "", ranges: [], idx: -1 };  // find-in-source state
 
   function startApp(payloadSource) {
     src = payloadSource;
@@ -576,6 +596,7 @@
       anchorEls = entry.anchors;
       body.appendChild(entry.el);
       emphasizeAnchors(focusCid);
+      refreshSourceSearch();   // re-find the query in the now-current source
     };
 
     if (sourceCache[key]) { done(sourceCache[key]); return; }
@@ -658,6 +679,107 @@
     var pr = pane.getBoundingClientRect();
     var er = el.getBoundingClientRect();
     pane.scrollTop += (er.top - pr.top) - pane.clientHeight / 2 + er.height / 2;
+  }
+
+  // ---------------- find-in-source (ctrl-F style) ----------------
+  // Uses the CSS Custom Highlight API so matches are painted without mutating
+  // the DOM (composing cleanly with the anchor <mark>s). Where it's missing,
+  // search still counts matches and scrolls to them, just without the tint.
+  var HAS_HIGHLIGHT_API = !!(window.CSS && CSS.highlights &&
+    typeof Highlight !== "undefined" && typeof Range !== "undefined");
+
+  function clearSourceHighlights() {
+    if (HAS_HIGHLIGHT_API) {
+      CSS.highlights.delete("cc-search");
+      CSS.highlights.delete("cc-search-current");
+    }
+  }
+
+  function updateSearchCount() {
+    var el = $("src-search-count");
+    if (!el) { return; }
+    var n = search.ranges.length;
+    el.textContent = !search.query ? "" : (n ? (search.idx + 1) + "/" + n : "0/0");
+    var prev = $("src-search-prev"), next = $("src-search-next");
+    if (prev) { prev.disabled = n < 2; }
+    if (next) { next.disabled = n < 2; }
+  }
+
+  // Flatten #source-body text nodes into one string + a node/offset index, so a
+  // query can match across text-node / <mark> boundaries.
+  function sourceTextIndex() {
+    var body = $("source-body");
+    var nodes = [], starts = [], text = "";
+    if (body) {
+      var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, null);
+      var node;
+      while ((node = walker.nextNode())) {
+        starts.push(text.length);
+        nodes.push(node);
+        text += node.nodeValue;
+      }
+    }
+    return { nodes: nodes, starts: starts, text: text };
+  }
+
+  function locate(ix, flatPos) {
+    var lo = 0, hi = ix.starts.length - 1, ans = 0;
+    while (lo <= hi) {
+      var mid = (lo + hi) >> 1;
+      if (ix.starts[mid] <= flatPos) { ans = mid; lo = mid + 1; } else { hi = mid - 1; }
+    }
+    return { node: ix.nodes[ans], offset: flatPos - ix.starts[ans] };
+  }
+
+  function gotoMatch(i) {
+    var n = search.ranges.length;
+    if (!n) { updateSearchCount(); return; }
+    search.idx = ((i % n) + n) % n;
+    if (HAS_HIGHLIGHT_API) {
+      var cur = new Highlight();
+      cur.add(search.ranges[search.idx]);
+      CSS.highlights.set("cc-search-current", cur);
+    }
+    var pane = $("source-body");
+    var rect = search.ranges[search.idx].getBoundingClientRect();
+    var pr = pane.getBoundingClientRect();
+    pane.scrollTop += (rect.top - pr.top) - pane.clientHeight / 2 + rect.height / 2;
+    updateSearchCount();
+  }
+
+  function runSourceSearch(query) {
+    search.query = query || "";
+    clearSourceHighlights();
+    search.ranges = []; search.idx = -1;
+    if (!search.query) { updateSearchCount(); return; }
+    var ix = sourceTextIndex();
+    var hay = ix.text.toLowerCase(), needle = search.query.toLowerCase();
+    if (!hay || !needle) { updateSearchCount(); return; }
+    var from = 0, pos;
+    while ((pos = hay.indexOf(needle, from)) !== -1) {
+      var s = locate(ix, pos), e = locate(ix, pos + needle.length);
+      try {
+        var r = document.createRange();
+        r.setStart(s.node, s.offset);
+        r.setEnd(e.node, e.offset);
+        search.ranges.push(r);
+      } catch (ex) { /* skip a malformed boundary */ }
+      from = pos + needle.length;
+      if (search.ranges.length >= 2000) { break; }   // safety cap
+    }
+    if (HAS_HIGHLIGHT_API && search.ranges.length) {
+      var all = new Highlight();
+      search.ranges.forEach(function (r) { all.add(r); });
+      CSS.highlights.set("cc-search", all);
+    }
+    if (search.ranges.length) { gotoMatch(0); } else { updateSearchCount(); }
+  }
+
+  // The source DOM (and thus ranges) changes per citation — re-find in whatever
+  // source is now showing.
+  function refreshSourceSearch() {
+    if (search.query) { runSourceSearch(search.query); }
+    else { clearSourceHighlights(); updateSearchCount(); }
   }
 
   function emphasizeAnchors(cid) {
@@ -1193,6 +1315,18 @@
     $("audit-btn").addEventListener("click", printOrDownloadAudit);
     $("reflow-toggle").addEventListener("click", toggleReflow);
     syncReflowButton();
+    var si = $("src-search");
+    if (si) {
+      si.addEventListener("input", function () { runSourceSearch(si.value); });
+      si.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          gotoMatch(search.idx + (ev.shiftKey ? -1 : 1));
+        }
+      });
+      $("src-search-next").addEventListener("click", function () { gotoMatch(search.idx + 1); });
+      $("src-search-prev").addEventListener("click", function () { gotoMatch(search.idx - 1); });
+    }
     $("reviewer").addEventListener("input", function () {
       if ($("reviewer").value.trim()) { $("reviewer").classList.remove("needed"); }
       persistLocal();
@@ -1219,19 +1353,17 @@
       var inNote = t && t.id === "note";
       var inField = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA");
 
-      if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
-        var dir = ev.key === "ArrowDown" ? 1 : -1;
-        // In the initials box (or any non-note field) leave arrows alone.
+      if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") {
+        var dir = ev.key === "ArrowRight" ? 1 : -1;
+        // Leave arrows to single-line fields (e.g. the initials / search box).
         if (inField && !inNote) { return; }
         // After a verdict, focus lands in the note; let the arrows move to the
-        // next/prev citation from there, but only at the note's text boundary
-        // so multi-line editing still works (Down on the last line, Up on the
-        // first line, never mid-selection).
+        // next/prev citation from there, but only at the very start/end of the
+        // note text so they still move the caret while editing.
         if (inNote) {
-          var pos = t.selectionStart;
-          if (pos !== t.selectionEnd) { return; }
-          if (dir === 1 && t.value.indexOf("\n", pos) !== -1) { return; }
-          if (dir === -1 && t.value.lastIndexOf("\n", pos - 1) !== -1) { return; }
+          if (t.selectionStart !== t.selectionEnd) { return; }
+          if (dir === 1 && t.selectionStart !== t.value.length) { return; }
+          if (dir === -1 && t.selectionStart !== 0) { return; }
         }
         ev.preventDefault();
         step(dir);
@@ -1241,6 +1373,9 @@
       // Verdict number keys must not fire while typing in a field.
       if (inField) { return; }
       if (ev.key >= "1" && ev.key <= "3" && current) {
+        // preventDefault so the digit doesn't also land in the note field that
+        // a ⚠️/‼️ verdict is about to focus.
+        ev.preventDefault();
         var order = ["verified", "needs_attention", "rejected"];
         setVerdict(current, order[Number(ev.key) - 1]);
       }
