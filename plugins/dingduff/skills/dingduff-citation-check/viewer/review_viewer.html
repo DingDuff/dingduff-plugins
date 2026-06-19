@@ -338,7 +338,7 @@
       <div class="prop"><b>Offered for:</b> <span id="card-prop"></span></div>
       <div id="src-search-row">
         <input id="src-search" type="search" placeholder="Find in source…"
-               autocomplete="off" spellcheck="false"
+               autocomplete="off" spellcheck="false" aria-label="Find in source"
                title="Search the source document shown below (Enter / Shift+Enter to step through matches)">
         <span id="src-search-count"></span>
         <button id="src-search-prev" type="button" title="Previous match (Shift+Enter)" aria-label="Previous match">‹</button>
@@ -1317,12 +1317,20 @@
     syncReflowButton();
     var si = $("src-search");
     if (si) {
-      si.addEventListener("input", function () { runSourceSearch(si.value); });
+      var searchTimer = null;
+      si.addEventListener("input", function () {
+        // Debounce: rebuilding the source text index is O(n) per keystroke and
+        // janks large opinions — search shortly after typing pauses.
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () { runSourceSearch(si.value); }, 130);
+      });
       si.addEventListener("keydown", function (ev) {
-        if (ev.key === "Enter") {
-          ev.preventDefault();
-          gotoMatch(search.idx + (ev.shiftKey ? -1 : 1));
-        }
+        if (ev.key !== "Enter") { return; }
+        ev.preventDefault();
+        clearTimeout(searchTimer);
+        // Flush a still-pending search; once it's current, Enter cycles matches.
+        if (si.value !== search.query) { runSourceSearch(si.value); }
+        else { gotoMatch(search.idx + (ev.shiftKey ? -1 : 1)); }
       });
       $("src-search-next").addEventListener("click", function () { gotoMatch(search.idx + 1); });
       $("src-search-prev").addEventListener("click", function () { gotoMatch(search.idx - 1); });
