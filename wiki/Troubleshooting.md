@@ -59,26 +59,6 @@ connectors, or (on **Free**) you've hit the one-custom-connector limit.
 
 ---
 
-## `opinion_extract` or `submit_batch_screen` is missing or fails
-
-**Symptom:** Most DingDuff tools work, but `opinion_extract` and/or
-`submit_batch_screen` are missing or error out.
-
-**Cause:** These two tools require your **own Anthropic API key (BYOK)**. They stay
-locked until you add it.
-
-**Fix:**
-1. Get an Anthropic API key from the **Claude Console** (console.anthropic.com) —
-   add a payment method and create a key. (You can ask Claude to walk you through
-   this.)
-2. Log in to your **profile on dingduff.com** and paste the key in.
-3. In a chat, confirm: *"Does the DingDuff connector have the `opinion_extract`
-   tool?"*
-
-Use a **dedicated** key and **turn off auto-reload** (required by our Terms).
-
----
-
 ## The sign-in window doesn't open (OAuth/login)
 
 **Symptom:** After clicking **Add**, no DingDuff sign-in page appears, or sign-in

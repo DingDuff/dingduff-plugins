@@ -72,6 +72,7 @@ that block with a single sentence pointing at the wiki, e.g.:
 </p>
 ```
 
-Keep the surrounding `#get-dingduff` section heading and the BYOK/pricing cards
-(`<div class="byok-explainer">` and the `#cost` section) — those aren't part of the
+Keep the surrounding `#get-dingduff` section heading and the "How DingDuff
+works" / pricing cards (the `<div class="byok-explainer">` block — legacy class
+name, content is generic — and the `#cost` section) — those aren't part of the
 step-by-step instructions and are still useful on the page.

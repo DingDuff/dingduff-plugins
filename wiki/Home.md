@@ -24,11 +24,8 @@ Do this:
    - They want the optional skills and best-practice settings → read [Skills & Settings](Skills).
 5. The connector URL the user must paste is exactly: https://app.dingduff.com/mcp
 
-Verify success at the end in two parts: (a) connector connected — ask the user to
-have Claude confirm it can see the `opinion_search` tool (works without an API
-key); (b) API key applied — confirm the `opinion_extract` tool is present (only
-appears after Step 4's BYOK key). If `opinion_extract` is missing, that's the API
-key, not a broken install.
+Verify success at the end by asking the user to have Claude confirm it can see
+the `opinion_search` tool — that means the connector is connected and working.
 -->
 
 # DingDuff Installation & Help
@@ -57,7 +54,7 @@ it** and ask Claude to walk you through everything. The easiest path:
 
 ## Before you start
 
-DingDuff itself is **free while in beta**. To use it you need three things:
+DingDuff itself is **free while in beta**. To use it you need two things:
 
 1. **Your own Claude account** — a paid plan (Pro, Max, Team, or Enterprise) is
    recommended. The Claude **desktop app** with **Cowork** mode is the best
@@ -66,9 +63,6 @@ DingDuff itself is **free while in beta**. To use it you need three things:
 2. **A DingDuff login** — sign up at **https://dingduff.com** to create your
    account. This gives you the email + password you'll use when connecting.
    DingDuff is for **licensed attorneys** (per the Terms of Service).
-3. **Your own Anthropic API key (BYOK)** — needed to unlock two of the tools.
-   You add this *after* connecting (Step 4 below). Typical cost is ~$5–10/month,
-   paid to Anthropic, not to DingDuff.
 
 > If you haven't created a DingDuff account yet, do that first at
 > https://dingduff.com (click **Sign Up**). You'll need that email and password
@@ -115,39 +109,13 @@ After connecting, DingDuff appears in your connector list with its tools. We
 recommend setting each tool to **always allow** (the **checkmark**, not the
 hand icon) so you aren't asked for permission on every research request.
 
-### Step 4 — Add your Anthropic API key (unlocks the last two tools)
+### Step 4 — Confirm it works
 
-Everything works at this point **except** two tools — `opinion_extract` and
-`submit_batch_screen` — which stay locked until you add your own Anthropic API
-key. To set it up:
-
-1. Open a new chat and confirm DingDuff is connected.
-2. Ask Claude: *"Help me get an Anthropic API key so I can add it to DingDuff."*
-   Claude will point you to the **Claude Console** (console.anthropic.com).
-3. In the Console, add a payment method, **create an API key**, and copy it.
-4. Log in to your **profile on dingduff.com** and paste the key into the field
-   provided.
-
-**Two safety rules (required by our Terms):**
-- Use a **dedicated key** for DingDuff only — so you can revoke it without
-  affecting anything else.
-- **Turn off auto-reload** on that key, so any exposure stays capped.
-
-### Step 5 — Confirm it works
-
-First confirm the connector is live. In a chat, ask Claude:
+In a chat, ask Claude:
 
 > *"Does the DingDuff connector have the `opinion_search` tool?"*
 
-If yes, the connector is working. Then confirm your **API key** (Step 4) took
-effect:
-
-> *"Does the DingDuff connector have the `opinion_extract` tool?"*
-
-`opinion_extract` and `submit_batch_screen` only appear **after** you add your API
-key — if they're missing, go back to Step 4. Everything else works without a key.
-
-Now try a real query, e.g.:
+If yes, the connector is working. Now try a real query, e.g.:
 
 > *"Using only DingDuff, find recent Texas appellate cases on the economic loss
 > rule and give me citations."*
@@ -188,7 +156,5 @@ or a **browser**; treat mobile as read-and-research on the go.
   [Troubleshooting → Opinion/statute store tools don't work](Troubleshooting).
 - **You can't find "Add custom connector"** → you may be on a Team/Enterprise
   plan; see [Team & Enterprise](Team-and-Enterprise).
-- **`opinion_extract` is missing or fails** → you haven't added your API key yet;
-  redo Step 4 above.
 
 For everything else, see [Troubleshooting](Troubleshooting).

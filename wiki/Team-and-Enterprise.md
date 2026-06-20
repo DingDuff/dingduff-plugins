@@ -40,8 +40,7 @@ Once the Owner has done this, each member connects on their own:
 2. Find **DingDuff** in the list and click **Connect**.
 3. Sign in with your **DingDuff** email and password (from dingduff.com).
 
-Then continue with [Install DingDuff → Step 3](Home) (allow the tools, add your
-API key).
+Then continue with [Install DingDuff → Step 3](Home) (allow the tools).
 
 ## If the connector connects but tools are blocked
 
