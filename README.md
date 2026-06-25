@@ -3,7 +3,7 @@
 Distribution home for [DingDuff](https://dingduff.com) legal-research and
 legal-workflow skills for Claude. These skills are built to work with the
 **DingDuff MCP connector** — if you haven't set that up yet, start with the
-[installation wiki](https://github.com/DingDuff/dingduff-plugins/wiki).
+[installation wiki](https://github.com/DingDuff/dingduff-public/wiki).
 
 ## The skills library
 
@@ -30,7 +30,7 @@ legal-workflow skills for Claude. These skills are built to work with the
    - [`dingduff_case-law-research-standard_v1.1.skill`](dist/dingduff_case-law-research-standard_v1.1.skill)
    - [`dingduff_case-law-research-deep_v1.1.skill`](dist/dingduff_case-law-research-deep_v1.1.skill)
    - [`dingduff_statute-research-deep_v1.1.skill`](dist/dingduff_statute-research-deep_v1.1.skill)
-   - [`dingduff_citation-check_v1.7.skill`](dist/dingduff_citation-check_v1.7.skill)
+   - [`dingduff_citation-check_v1.8.skill`](dist/dingduff_citation-check_v1.8.skill)
    - [`dingduff_legal-citation-format_v1.4.skill`](dist/dingduff_legal-citation-format_v1.4.skill)
 2. In Claude, open your **Skills** settings:
    - **Cowork (desktop):** Customize (upper right) → **Skills** → upload skill
@@ -48,7 +48,7 @@ This repo is also a Claude Code plugin marketplace — installing the plugin giv
 you the whole skills library at once:
 
 ```
-/plugin marketplace add DingDuff/dingduff-plugins
+/plugin marketplace add DingDuff/dingduff-public
 /plugin install dingduff@dingduff
 ```
 
@@ -56,7 +56,7 @@ you the whole skills library at once:
 
 - The **DingDuff MCP connector** added to your Claude client — the skills use
   DingDuff's research tools, and cite-check uses the `citecheck_review` panel.
-  See the [wiki](https://github.com/DingDuff/dingduff-plugins/wiki).
+  See the [wiki](https://github.com/DingDuff/dingduff-public/wiki).
 - For `dingduff-citation-check`: `python3` available to the session (Cowork and
   Claude Code provide it).
 - `dingduff-legal-citation-format` is standalone — it formats citations and needs
