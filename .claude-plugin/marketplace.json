@@ -8,7 +8,7 @@
     {
       "name": "dingduff",
       "source": "./plugins/dingduff",
-      "description": "DingDuff legal research & workflow skills for Claude: case-law research (standard and deep), deep statutory research, citation verification (/dingduff:dingduff-citation-check) of Markdown, Word, or Google Docs memos against stored sources plus attorney-supplied documents, and practitioner-style citation formatting. The research and verification skills use the DingDuff MCP connector."
+      "description": "DingDuff legal research & workflow skills for Claude: legal research (find, read, and validate cases, statutes, and regulations), citation verification (/dingduff:dingduff-citation-check) of Markdown, Word, or Google Docs memos against stored sources plus attorney-supplied documents, and practitioner-style citation formatting. The research and verification skills use the DingDuff MCP connector."
     }
   ]
 }

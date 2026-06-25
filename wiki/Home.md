@@ -166,8 +166,8 @@ Claude **focused excerpts** of the relevant material, so it can read what matter
 These take a few minutes and noticeably improve results. Full details on
 [Skills & Settings](Skills):
 
-- **Install the research skills** (`dingduff-case-law-research-standard` is the
-  best default) — they improve the quality of research answers.
+- **Install the `dingduff-legal-research` skill** — it improves the quality and
+  depth of research answers.
 - **Install the `dingduff-citation-check` skill** — verifies every citation in a
   drafted memo against the stored sources.
 - **Add a custom instruction** (Profile → *Instructions for Claude*) telling

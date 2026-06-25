@@ -18,19 +18,15 @@ your skill picker.
 
 ## The skills
 
-### Research skills
+### Legal research
 
-- **`dingduff-case-law-research-standard`** (v1.1) — the right default for most legal
-  questions. Runs systematic searches, reads the actual opinions, and builds a
-  cited answer.
-  Download: [`dingduff_case-law-research-standard_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-standard_v1.1.skill)
-- **`dingduff-case-law-research-deep`** (v1.1) — exhaustive case-law research that maps
-  the full citation network and validity-checks every key case. For briefs,
-  dispositive motions, and formal opinions.
-  Download: [`dingduff_case-law-research-deep_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_case-law-research-deep_v1.1.skill)
-- **`dingduff-statute-research-deep`** (v1.1) — exhaustive statutory research: full code
-  mapping, definitions, cross-references, and judicial gloss on ambiguous terms.
-  Download: [`dingduff_statute-research-deep_v1.1.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_statute-research-deep_v1.1.skill)
+- **`dingduff-legal-research`** (v2.1) — one skill for legal research generally:
+  it finds, retrieves, reads, and **validates** the controlling cases, statutes,
+  and regulations, maps the citation network and the statutory landscape, and
+  confirms everything is still good law. Thorough by default, and scales from a
+  quick "what's the law on X" to a full doctrinal map. (Replaces the older
+  separate case-law standard/deep and statute-research skills.)
+  Download: [`dingduff_legal-research_v2.1.skill`](https://github.com/DingDuff/dingduff-public/blob/HEAD/dist/dingduff_legal-research_v2.1.skill)
 
 ### Citation checking
 
