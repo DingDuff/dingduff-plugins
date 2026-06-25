@@ -40,7 +40,7 @@ your skill picker.
   missing from CourtListener, the other side's brief, a factual PDF — and opens a
   review panel showing the memo and each source side by side. Runs entirely in
   your own session.
-  Download: [`dingduff_citation-check_v1.7.skill`](https://github.com/DingDuff/dingduff-plugins/blob/HEAD/dist/dingduff_citation-check_v1.7.skill)
+  Download: [`dingduff_citation-check_v1.8.skill`](https://github.com/DingDuff/dingduff-public/blob/HEAD/dist/dingduff_citation-check_v1.8.skill)
   Needs `python3` (Cowork and Claude Code provide it). Save case/statute sources
   first via `opinion_store` / `statute_store`; drop any other source (text or a
   text-layer PDF) into your working folder.
