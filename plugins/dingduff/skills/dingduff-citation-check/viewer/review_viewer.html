@@ -50,6 +50,8 @@
     --search-hl-bg: #bfe1ff;
     --search-hl-current-bg: #4ea2f7;
     --search-hl-current-fg: #ffffff;
+    --page-hint-bg: #d0eee0;
+    --page-hint-fg: #14423b;
     /* Text color used ON saturated status fills (primary button, verdict
        buttons, reflow toggle). Light fills in dark mode flip this dark. */
     --on-status-fg: #ffffff;
@@ -71,26 +73,28 @@
     --bg: #141414;
     --pane: #1e1e1e;
     --ink: #ececec;
-    --muted: #9a9a9a;
+    --muted: #a8a8a8;
     --line: #2a2a2a;
-    --accent: #7ab1ee;
-    --green: #5dd47e;
-    --green-bg: #1c3a26;
-    --red: #ff8579;
-    --red-bg: #3a1c19;
-    --amber: #f0c060;
-    --amber-bg: #36281a;
-    --gray-bg: #1a1a1a;
-    --card-bg: #1b2434;
-    --hl: #5a4a14;
-    --hl-current: #8a6b1f;
+    --accent: #8fb7e6;
+    --green: #7dc990;
+    --green-bg: #1f3328;
+    --red: #e68a82;
+    --red-bg: #321b18;
+    --amber: #d9b96a;
+    --amber-bg: #2f2517;
+    --gray-bg: #101010;
+    --card-bg: #252a36;
+    --hl: #6e5a1f;
+    --hl-current: #a6822a;
     --reviewer-needed-bg: #3a1c19;
-    --reviewer-needed-fg: #ff8579;
-    --cite-current-bg: #1f2c45;
-    --input-bg: #252525;
-    --search-hl-bg: #1f3a55;
+    --reviewer-needed-fg: #e68a82;
+    --cite-current-bg: #26344e;
+    --input-bg: #222222;
+    --search-hl-bg: #274560;
     --search-hl-current-bg: #3a7dc9;
     --search-hl-current-fg: #ffffff;
+    --page-hint-bg: #1f3a30;
+    --page-hint-fg: #c8e6d8;
     /* Status fills are LIGHTER in dark mode, so flip the on-fill text dark
        (white-on-pale-green is unreadable; near-black on pale green pops). */
     --on-status-fg: #0e0e0e;
@@ -232,6 +236,17 @@
     border-radius: 999px;
   }
   #reflow-toggle.on { background: var(--accent); border-color: var(--accent); color: var(--on-status-fg); }
+  /* Small icon-only theme toggle. Sits in the topbar; user click is the
+     highest-priority theme signal (sticks for the session even if the MCP
+     host later sends a different theme). */
+  #theme-toggle {
+    flex: 0 0 auto;
+    padding: 4px 7px;
+    line-height: 0;
+    color: var(--muted);
+  }
+  #theme-toggle:hover { color: var(--ink); }
+  #theme-toggle svg { display: block; width: 16px; height: 16px; }
   .doc {
     flex: 1 1 auto;
     min-height: 0;
@@ -306,6 +321,37 @@
      never get confused with the yellow anchor highlights. */
   ::highlight(cc-search) { background-color: var(--search-hl-bg); }
   ::highlight(cc-search-current) { background-color: var(--search-hl-current-bg); color: var(--search-hl-current-fg); }
+  /* Page-word hints — any source document (an attorney-supplied brief, a
+     Restatement section, a non-CourtListener case) often has explicit "page"
+     or "pg" references inline. Highlighting them helps pin-cite verification
+     in sources that don't have our own page pills. Distinct hue from search
+     (blue) and anchors (yellow) — soft teal. */
+  ::highlight(cc-page-hint) {
+    background-color: var(--page-hint-bg);
+    color: var(--page-hint-fg);
+  }
+  /* Page-break indicators — opinion_store inserts inline `<<pg. N>>` markers
+     at each page boundary; the viewer drops the marker text and renders this
+     pill in its place so attorneys can spot which page a passage lives on
+     when checking pin-cites. The page number is supplied by CSS `content`
+     from data-page, so the DOM text content stays unchanged at the marker
+     position — anchor offsets and find-in-source matching are unaffected. */
+  .cc-pagebreak {
+    display: inline-block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72em;
+    font-weight: 500;
+    color: var(--muted);
+    background: var(--gray-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0 7px;
+    margin: 0 4px;
+    vertical-align: 1px;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .cc-pagebreak::before { content: "p. " attr(data-page); }
   #card .fail-note, #card .stale-note {
     background: var(--red-bg); color: var(--red);
     border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-size: 0.9em;
@@ -384,6 +430,7 @@
   <div class="brand"><span id="brand-icon" class="ddog" aria-hidden="true"></span>DingDuff <span>Cite-Check</span></div>
   <div id="memo-name"></div>
   <div id="progress" class="chip"></div>
+  <button id="theme-toggle" type="button" title="Switch to dark mode" aria-label="Switch to dark mode"></button>
   <input id="reviewer" placeholder="Your initials *" autocomplete="off"
          title="Your initials are required before you can record a verdict.">
   <button id="audit-btn" title="Open the print dialog to save this review as a PDF; if printing is blocked, downloads a print-ready HTML copy">Generate Printable Review Audit Log</button>
@@ -671,6 +718,7 @@
       body.appendChild(entry.el);
       emphasizeAnchors(focusCid);
       refreshSourceSearch();   // re-find the query in the now-current source
+      highlightPageHints();    // paint "page"/"pg" word occurrences
     };
 
     if (sourceCache[key]) { done(sourceCache[key]); return; }
@@ -720,6 +768,14 @@
           // sit on non-whitespace quote characters, so a hard-wrap whitespace
           // run never straddles two segments — collapsing within each segment
           // can't move a highlight relative to its words.
+          if (seg.pageBreak) {
+            var pb = document.createElement("span");
+            pb.className = "cc-pagebreak";
+            pb.setAttribute("data-page", String(seg.page));
+            pb.setAttribute("aria-label", "page " + seg.page);
+            container.appendChild(pb);
+            return;
+          }
           var text = reflowText(seg.text);
           if (!seg.marks || !seg.marks.length) {
             container.appendChild(document.createTextNode(text));
@@ -854,6 +910,46 @@
   function refreshSourceSearch() {
     if (search.query) { runSourceSearch(search.query); }
     else { clearSourceHighlights(); updateSearchCount(); }
+  }
+
+  // Paint every "page" / "pg" word in the source pane via the CSS Custom
+  // Highlight API. Useful for attorney-supplied documents (briefs, Restatement
+  // sections, factual PDFs) that carry their own inline page references —
+  // those don't have our `<<pg. N>>` markers so the page-pill machinery
+  // doesn't help, but spotting "page 12" / "pg 12" inline lets the reviewer
+  // jump to a pin-cite. Word-boundary match; case-insensitive. No DOM
+  // mutation (so anchor offsets and find-in-source are untouched).
+  var PAGE_WORD_RE = /\b(page|pg)\b/gi;
+  function highlightPageHints() {
+    if (!HAS_HIGHLIGHT_API) { return; }
+    var body = $("source-body");
+    if (!body) { CSS.highlights.delete("cc-page-hint"); return; }
+    var ranges = [];
+    var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while ((node = walker.nextNode())) {
+      var text = node.data;
+      if (!text || text.length < 2) { continue; }
+      PAGE_WORD_RE.lastIndex = 0;
+      var m;
+      while ((m = PAGE_WORD_RE.exec(text)) !== null) {
+        try {
+          var r = document.createRange();
+          r.setStart(node, m.index);
+          r.setEnd(node, m.index + m[0].length);
+          ranges.push(r);
+        } catch (e) { /* mutated node mid-walk; skip */ }
+        if (ranges.length >= 2000) { break; }   // safety cap
+      }
+      if (ranges.length >= 2000) { break; }
+    }
+    if (ranges.length) {
+      var hl = new Highlight();
+      ranges.forEach(function (r) { hl.add(r); });
+      CSS.highlights.set("cc-page-hint", hl);
+    } else {
+      CSS.highlights.delete("cc-page-hint");
+    }
   }
 
   function emphasizeAnchors(cid) {
@@ -1388,6 +1484,14 @@
     $("export-btn").addEventListener("click", exportReview);
     $("audit-btn").addEventListener("click", printOrDownloadAudit);
     $("reflow-toggle").addEventListener("click", toggleReflow);
+    var themeBtn = $("theme-toggle");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", toggleTheme);
+      // Ensure the icon reflects the current theme as soon as the topbar
+      // becomes visible (the inline bootstrap set data-theme before this
+      // button existed; calling applyTheme paints the icon).
+      applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+    }
     syncReflowButton();
     var si = $("src-search");
     if (si) {
@@ -1544,6 +1648,14 @@
     }
     function lastIsSpace() { return out.length && out[out.length - 1] === " "; }
     while (i < n) {
+      // Skip `<<pg. N>>` page markers entirely — match the Python verifier's
+      // PAGE_MARKER_RE handling so the same quote matches against both the
+      // server-side verification copy and the panel-rendered copy.
+      if (text.charCodeAt(i) === 60 && text.substr(i, 6) === "<<pg. ") {
+        PAGE_MARKER_RE.lastIndex = i;
+        var pm = PAGE_MARKER_RE.exec(text);
+        if (pm && pm.index === i) { i = pm.index + pm[0].length; continue; }
+      }
       var eff = effectiveCharAt(text, i);
       var ch = eff.ch, w = eff.w;
       if (CF_RE.test(ch)) { i += w; continue; }
@@ -1767,19 +1879,52 @@
   // an iframe reads the OS — not Claude's in-app theme — so we also accept
   // the host's hostContext.theme (delivered in the ui/initialize result and
   // in subsequent ui/notifications/host-context-changed updates, per the
-  // MCP Apps spec). Host wins; once we've seen one host theme, OS changes
-  // are ignored for the rest of the session.
+  // MCP Apps spec).
+  //
+  // Precedence, highest to lowest: user click on #theme-toggle > host
+  // hostContext.theme > OS prefers-color-scheme. Once the user clicks, OS
+  // and host changes are ignored for the rest of the session; once the
+  // host sends a theme (and the user hasn't overridden), OS changes are
+  // ignored.
+  var userThemeOverride = false;
   var hostThemeReceived = false;
   var themeMql = window.matchMedia
     ? window.matchMedia("(prefers-color-scheme: dark)")
     : null;
 
+  // Feather-style stroke icons (inline SVG — data: images and external URLs
+  // are CSP-blocked in the MCP App iframe; the dog mark is the same way).
+  var MOON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"' +
+    ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round"' +
+    ' aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21' +
+    ' 12.79z"/></svg>';
+  var SUN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"' +
+    ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round"' +
+    ' aria-hidden="true"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2"' +
+    ' x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2"' +
+    ' y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line' +
+    ' x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7"' +
+    ' x2="19.8" y2="19.8"/><line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/>' +
+    '<line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/></svg>';
+
   function applyTheme(theme) {
     if (theme !== "light" && theme !== "dark") { return; }
     document.documentElement.setAttribute("data-theme", theme);
+    // Update the toggle icon + label to advertise the OPPOSITE action.
+    // (Button may not exist yet during the inline bootstrap; harmless.)
+    var btn = document.getElementById("theme-toggle");
+    if (btn) {
+      var goingTo = theme === "dark" ? "light" : "dark";
+      btn.innerHTML = theme === "dark" ? SUN_SVG : MOON_SVG;
+      btn.setAttribute("aria-label", "Switch to " + goingTo + " mode");
+      btn.setAttribute("title", "Switch to " + goingTo + " mode");
+    }
   }
 
   function applyHostContext(ctx) {
+    // User click wins; once they pick, we stop listening to the host's theme
+    // signal for the rest of the session (they can always click again).
+    if (userThemeOverride) { return; }
     // McpUiHostContext.theme is optional, and partial updates (host-context-
     // changed) only carry changed fields; skip when not present.
     if (ctx && (ctx.theme === "light" || ctx.theme === "dark")) {
@@ -1788,12 +1933,20 @@
     }
   }
 
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute("data-theme") || "light";
+    userThemeOverride = true;
+    applyTheme(current === "dark" ? "light" : "dark");
+  }
+
   // OS-theme changes still apply in the standalone bundle (no host) and in
-  // hosts that never send a theme. Once any host theme arrives, we stop
-  // tracking the OS so the host stays authoritative.
+  // hosts that never send a theme. Once any user or host theme arrives, we
+  // stop tracking the OS so the chosen theme stays authoritative.
   if (themeMql && themeMql.addEventListener) {
     themeMql.addEventListener("change", function (ev) {
-      if (!hostThemeReceived) { applyTheme(ev.matches ? "dark" : "light"); }
+      if (!hostThemeReceived && !userThemeOverride) {
+        applyTheme(ev.matches ? "dark" : "light");
+      }
     });
   }
 
@@ -1882,8 +2035,44 @@
       // true for hosted opinions/statutes (the panel fetches a fresh copy that
       // may differ from the verified file), false for inline documents (the
       // delivered text IS the verified working file, so no caveat is needed).
-      return { segments: segmentDocument(docText, spans),
+      return { segments: splitSegmentsAtPageMarkers(
+                 segmentDocument(docText, spans)),
                checksum_ok: true, reanchored: !!reanchored, unlocated: unlocated };
+    }
+
+    // Find inline page markers — the literal token `<<pg. NNN>>` that
+    // opinion_store inserts into stored opinion text at each page boundary
+    // (replacing CL's invisible U+200B markers, which were unspottable). Split
+    // each segment around any markers it contains, dropping the marker text
+    // and inserting a pageBreak pseudo-segment that the render loop turns
+    // into a visible pill. The page number rides on the marker itself, so no
+    // per-source citation parsing is needed here — and parallel-reporter
+    // ambiguity is resolved once on the server, not re-derived per render.
+    var PAGE_MARKER_RE = /<<pg\. (\d+)>>/g;
+    function splitSegmentsAtPageMarkers(segments) {
+      var out = [];
+      segments.forEach(function (seg) {
+        if (seg.pageBreak) { out.push(seg); return; }
+        if (typeof seg.text !== "string" || seg.text.indexOf("<<pg.") === -1) {
+          out.push(seg);
+          return;
+        }
+        PAGE_MARKER_RE.lastIndex = 0;
+        var text = seg.text;
+        var cursor = 0;
+        var m;
+        while ((m = PAGE_MARKER_RE.exec(text)) !== null) {
+          if (m.index > cursor) {
+            out.push({ text: text.slice(cursor, m.index), marks: seg.marks });
+          }
+          out.push({ pageBreak: true, page: parseInt(m[1], 10) });
+          cursor = m.index + m[0].length;
+        }
+        if (cursor < text.length) {
+          out.push({ text: text.slice(cursor), marks: seg.marks });
+        }
+      });
+      return out;
     }
     return {
       mode: "mcp",
