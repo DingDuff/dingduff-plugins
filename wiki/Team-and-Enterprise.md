@@ -62,6 +62,12 @@ is often controlled centrally. If downloads fail, ask your admin:
 
 Note: capability changes usually apply only to **new** chat sessions.
 
+**If your admin won't (or can't) enable those**, you can still use DingDuff via
+the **BYOK / API key (Legacy)** path — add your own Anthropic API key to your
+dingduff.com profile to turn on back-end tools (`opinion_extract`,
+`submit_batch_screen`, `retrieve_batch_screen`) that let Claude read case material
+without downloading anything. See [Install → BYOK / API key](Home).
+
 ## Still stuck?
 
 See [Troubleshooting](Troubleshooting), or email **hello@dingduff.com** with your

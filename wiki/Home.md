@@ -22,6 +22,9 @@ Do this:
    - A tool fails or behaves oddly → read [Troubleshooting](Troubleshooting) and
      match the symptom.
    - They want the optional skills and best-practice settings → read [Skills & Settings](Skills).
+   - On a locked-down account where they CAN'T enable Claude's code execution /
+     network egress (so `opinion_store` can't save files) → point them to the
+     "BYOK / API key (Legacy)" section below.
 5. The connector URL the user must paste is exactly: https://app.dingduff.com/mcp
 
 Verify success at the end by asking the user to have Claude confirm it can see
@@ -119,6 +122,42 @@ If yes, the connector is working. Now try a real query, e.g.:
 
 > *"Using only DingDuff, find recent Texas appellate cases on the economic loss
 > rule and give me citations."*
+
+---
+
+## BYOK / API key — *(Legacy)*
+
+**Most users don't need this — skip it unless you're in a locked-down environment
+(read on).**
+
+DingDuff works best when Claude can **save the full text of a case or statute to
+your working folder** with `opinion_store` / `statute_store` and read the actual
+source. That needs Claude's **code-execution environment with network access**
+turned on (Settings → Capabilities → *Code execution and file creation* +
+*Allow network egress*; the desktop **Cowork** app already has it — see
+[Browser Setup](Browser-Setup)).
+
+The **BYOK** (bring-your-own-key) path is the older way, for when you **can't turn
+those settings on** — e.g. a corporate **Team / Enterprise** account whose admin
+won't enable code execution or network egress. Without those, the store tools
+can't download files, so instead you add **your own Anthropic API key** to your
+DingDuff profile. That unlocks three tools that run on DingDuff's back end —
+`opinion_extract`, `submit_batch_screen`, and `retrieve_batch_screen` — which hand
+Claude **focused excerpts** of the relevant material, so it can read what matters
+**without downloading anything and without flooding the chat** with full opinions.
+
+**Which one applies to you?**
+
+- **You can change Claude's settings** (most Pro/Max users; Cowork desktop) → turn
+  on code execution + network egress and use `opinion_store` / `statute_store`.
+  Better results, no key needed. **Skip BYOK.**
+- **You can't change those settings** (locked-down work account) → set up BYOK:
+  1. Get an Anthropic API key from the **Claude Console** (console.anthropic.com)
+     — add a payment method and create a key (ask Claude to walk you through it).
+  2. Log in to your **profile on dingduff.com** and paste the key in.
+  3. Use a **dedicated** key and **turn off auto-reload** (required by our Terms).
+
+> Cost is small — typically a few dollars a month, billed by Anthropic, not DingDuff.
 
 ---
 

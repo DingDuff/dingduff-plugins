@@ -41,6 +41,11 @@ download silently fails.
 > [Team & Enterprise](Team-and-Enterprise). More detail in
 > [Browser Setup](Browser-Setup).
 
+> **Can't change these settings** (a locked-down work account)? Use the
+> **BYOK / API key (Legacy)** path instead — an Anthropic API key on your
+> dingduff.com profile enables back-end tools that read case material without
+> downloading files. See [Install → BYOK / API key](Home).
+
 ---
 
 ## You can't find "Add custom connector"
