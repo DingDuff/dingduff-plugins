@@ -1,7 +1,7 @@
 {
   "name": "dingduff",
   "description": "Client-side legal research and workflow skills for DingDuff users: legal research (find, read, and validate cases, statutes, and regulations), citation verification of Markdown/Word/Google Docs memos against stored sources plus attorney-supplied documents, and practitioner-style citation formatting.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": {
     "name": "DingDuff"
   }

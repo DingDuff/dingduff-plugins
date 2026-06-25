@@ -6,9 +6,11 @@ Surface it when a user asks whether cite-check is accurate/reliable, whether the
 document or data stays private, what kinds of writing or sources it can check, or
 how the process works. For *installing* the skill, point to the Skills page; the
 dingduff-citation-check skill drives the actual run — this page is the explainer.
-Be precise about privacy: the local verification sends nothing, but the interactive
-review panel passes the document through DingDuff once as call arguments (never
-stored or logged), and the standalone review.html keeps everything on the machine.
+Be precise about privacy: the local verification sends nothing — the verifier
+script reads the memo and any supplied documents on the user's machine. The
+interactive review panel then passes the memo and documents through DingDuff
+once as call arguments to render the panel; those arguments are never stored
+or logged.
 -->
 
 # How Citation Checking Works
