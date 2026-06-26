@@ -1,6 +1,6 @@
 ---
 name: dingduff-citation-check
-description: Verify every citation in a drafted legal memo (Markdown, Word, or Google Docs) against stored opinions and statutes plus any other source documents the attorney supplies (a Restatement section, an off-CourtListener case, an opposing brief, a factual PDF). Use after drafting a memo when the user asks to cite-check, citecheck, verify citations, verify quotes, check cites, or validate authorities. Produces cites.json, opens the interactive attorney review panel (or a standalone review.html), and records the attorney's verdicts in review.json. (v2.2)
+description: Verify every citation in a drafted legal memo (Markdown, Word, or Google Docs) against stored opinions and statutes plus any other source documents the attorney supplies (a Restatement section, an off-CourtListener case, an opposing brief, a factual PDF). Use after drafting a memo when the user asks to cite-check, citecheck, verify citations, verify quotes, check cites, or validate authorities. Produces cites.json, opens the interactive attorney review panel (or a standalone review.html), and records the attorney's verdicts in review.json. (v2.3)
 ---
 
 # Cite-Check: verify a memo's citations against stored sources
@@ -136,10 +136,10 @@ Hard rules for quotes:
 
 ## Step 4 — Missing sources
 
-If a cited authority has no stored file, tell the user and offer to fetch it
-now (opinion_store / statute_store → save into `sources/`). If the user
-declines, still include the citation, with a source entry of
-`{"type": "opinion"|"statute", "missing": true, "case_name"/"citation": ...}`
+If a cited authority has no stored file, first attempt to fetch from DingDuff
+(opinion_store / statute_store → save into `sources/`). If you cannot locate
+the source, tell the user and still include the citation, with a source entry
+of `{"type": "opinion"|"statute", "missing": true, "case_name"/"citation": ...}`
 so it is tracked as unverifiable rather than silently dropped.
 
 ## Step 5 — Write proposals and verify

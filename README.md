@@ -30,7 +30,7 @@ legal-workflow skills for Claude. These skills are built to work with the
    - [`dingduff_legal-research_v2.1.skill`](dist/dingduff_legal-research_v2.1.skill)
    - [`dingduff_legal-analysis_v1.2.skill`](dist/dingduff_legal-analysis_v1.2.skill)
    - [`dingduff_legal-writing_v1.2.skill`](dist/dingduff_legal-writing_v1.2.skill)
-   - [`dingduff_citation-check_v2.2.skill`](dist/dingduff_citation-check_v2.2.skill)
+   - [`dingduff_citation-check_v2.3.skill`](dist/dingduff_citation-check_v2.3.skill)
    - [`dingduff_legal-citation-format_v1.4.skill`](dist/dingduff_legal-citation-format_v1.4.skill)
 2. In Claude, open your **Skills** settings:
    - **Cowork (desktop):** Customize (upper right) → **Skills** → upload skill
