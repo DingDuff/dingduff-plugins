@@ -28,31 +28,16 @@ your skill picker.
   separate case-law standard/deep and statute-research skills.)
   Download: [`dingduff_legal-research_v2.1.skill`](https://github.com/DingDuff/dingduff-public/blob/HEAD/dist/dingduff_legal-research_v2.1.skill)
 
-### Legal analysis & writing
-
-These two skills pair: analysis builds the citation-anchored reasoning,
-writing turns it into a finished document. Install both for any task that
-ends in a memo, brief, motion, or letter — Claude will run them in order.
+### Legal analysis
 
 - **`dingduff-legal-analysis`** (v1.2) — the reasoning engine. Frames the legal
   issues, synthesizes the governing rule from the cases and statutes you've
   gathered, analyzes the facts against the rule, organizes the proof
   (CRAC/CREAC), and deploys authority. Use when you want Claude to think
-  through a question rigorously before drafting anything — *"what's the law
-  on X," "do we have a claim," "will this argument hold up," "what are the
-  issues here."* Pairs with `dingduff-legal-research` (gets the authority)
-  and `dingduff-legal-writing` (drafts from the analysis).
+  through a question rigorously — *"what's the law on X," "do we have a claim,"
+  "will this argument hold up," "what are the issues here."* Pairs with
+  `dingduff-legal-research`, which gathers the authority it reasons over.
   Download: [`dingduff_legal-analysis_v1.2.skill`](https://github.com/DingDuff/dingduff-public/blob/HEAD/dist/dingduff_legal-analysis_v1.2.skill)
-
-- **`dingduff-legal-writing`** (v1.2) — drafts and revises legal documents:
-  office memos, trial-court motion briefs, appellate briefs, demand letters,
-  and client advice letters. Also runs the craft passes — organization,
-  persuasion, and editing for clarity — on any draft you already have. Use
-  for any drafting or revision task: *"write a memo on X," "draft this
-  motion," "respond to their brief," "make this more persuasive," "tighten
-  this up."* Builds on `dingduff-legal-analysis` (which produces the
-  analytical skeleton it drafts from).
-  Download: [`dingduff_legal-writing_v1.2.skill`](https://github.com/DingDuff/dingduff-public/blob/HEAD/dist/dingduff_legal-writing_v1.2.skill)
 
 ### Citation checking
 

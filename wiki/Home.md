@@ -168,9 +168,8 @@ These take a few minutes and noticeably improve results. Full details on
 
 - **Install the `dingduff-legal-research` skill** — it improves the quality and
   depth of research answers.
-- **Install the `dingduff-legal-analysis` + `dingduff-legal-writing` skills** —
-  the reasoning + drafting pair that turns a research answer into a memo,
-  brief, motion, or letter.
+- **Install the `dingduff-legal-analysis` skill** — the reasoning step that
+  frames the issues and organizes the proof from a research answer.
 - **Install the `dingduff-citation-check` skill** — verifies every citation in a
   drafted memo against the stored sources.
 - **Add a custom instruction** (Profile → *Instructions for Claude*) telling
